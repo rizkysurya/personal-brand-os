@@ -17,6 +17,7 @@ import type * as features_notion__schema from "../features/notion/_schema.js";
 import type * as features_notion_mutation from "../features/notion/mutation.js";
 import type * as features_notion_query from "../features/notion/query.js";
 import type * as files from "../files.js";
+import type * as homeConfig from "../homeConfig.js";
 import type * as http from "../http.js";
 import type * as landing from "../landing.js";
 import type * as leads from "../leads.js";
@@ -49,6 +50,7 @@ declare const fullApi: ApiFromModules<{
   "features/notion/mutation": typeof features_notion_mutation;
   "features/notion/query": typeof features_notion_query;
   files: typeof files;
+  homeConfig: typeof homeConfig;
   http: typeof http;
   landing: typeof landing;
   leads: typeof leads;

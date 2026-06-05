@@ -20,6 +20,7 @@ import {
   MessageSquare,
   NotebookPen,
   Newspaper,
+  Palette,
   Settings,
   Sparkles,
   Users,
@@ -101,6 +102,7 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
       count: customPages || null,
       children: [
         { id: "pages-all",       label: "All pages",    href: `${ADMIN_BASE}/pages`,     icon: Newspaper,      count: customPages || null },
+        { id: "pages-appearance",label: "Tampilan Beranda", href: `${ADMIN_BASE}/appearance`, icon: Palette,   count: null },
         { id: "pages-landing",   label: "Landing page", href: `${ADMIN_BASE}/landing`,   icon: LayoutTemplate, count: enabledLanding || null },
         { id: "pages-blog",      label: "Blog",         href: `${ADMIN_BASE}/posts`,     icon: FileText,       count: draftCount || null },
         { id: "pages-portfolio", label: "Portfolio",    href: `${ADMIN_BASE}/portfolio`, icon: Briefcase,      count: state.portfolio.length || null },

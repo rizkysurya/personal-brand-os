@@ -233,6 +233,8 @@ a, button { transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
   --border: rgba(255, 255, 255, 0.1);
   --input: rgba(255, 255, 255, 0.14);
   --ring: oklch(0.62 0.23 295);
+  --accent-1: #8b5cf6;
+  --accent-2: #22d3ee;
   color-scheme: dark;
 }
 
@@ -268,7 +270,7 @@ body:has(.theme-studio) {
 
 /* Gradient text accent. */
 .text-gradient {
-  background: linear-gradient(100deg, #c4b5fd 0%, #8b5cf6 45%, #22d3ee 100%);
+  background: linear-gradient(100deg, var(--accent-1, #8b5cf6), var(--accent-2, #22d3ee));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -283,10 +285,10 @@ body:has(.theme-studio) {
 @media (prefers-reduced-motion: no-preference) {
   .glow-hover:hover {
     transform: translateY(-6px);
-    border-color: rgba(139, 92, 246, 0.55);
-    box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.35),
-      0 30px 60px -24px rgba(124, 58, 237, 0.55),
-      0 0 42px -10px rgba(34, 211, 238, 0.28);
+    border-color: color-mix(in oklab, var(--accent-1, #8b5cf6) 55%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--accent-1, #8b5cf6) 35%, transparent),
+      0 30px 60px -24px color-mix(in oklab, var(--accent-1, #8b5cf6) 50%, transparent),
+      0 0 42px -10px color-mix(in oklab, var(--accent-2, #22d3ee) 28%, transparent);
   }
 }
 
