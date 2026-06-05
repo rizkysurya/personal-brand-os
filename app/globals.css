@@ -209,3 +209,166 @@ a, button { transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
   background: color-mix(in oklch, var(--brand) 20%, transparent);
   color: var(--brand);
 }
+
+/* ============================================================
+   STUDIO — dark glassmorphism portfolio theme (Graphic / Motion).
+   Scoped to `.theme-studio` (set on the public-site wrapper) so the admin
+   keeps its own look. Electric-violet brand + cyan glow on near-black.
+   ============================================================ */
+.theme-studio {
+  --background: #07060d;
+  --foreground: oklch(0.97 0.01 285);
+  --card: rgba(255, 255, 255, 0.045);
+  --card-foreground: oklch(0.97 0.01 285);
+  --popover: #0e0b1a;
+  --popover-foreground: oklch(0.97 0.01 285);
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: oklch(0.78 0.03 285);
+  --secondary: rgba(255, 255, 255, 0.06);
+  --secondary-foreground: oklch(0.97 0.01 285);
+  --accent: rgba(139, 92, 246, 0.16);
+  --accent-foreground: oklch(0.98 0.01 285);
+  --brand: oklch(0.62 0.23 295);
+  --brand-foreground: oklch(0.99 0 0);
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.14);
+  --ring: oklch(0.62 0.23 295);
+  color-scheme: dark;
+}
+
+/* Dark base on body too, so overscroll / edges stay black. */
+body:has(.theme-studio) {
+  background: #07060d;
+}
+
+/* Modern tight sans for portfolio headings (overrides the global serif). */
+.theme-studio h1,
+.theme-studio h2,
+.theme-studio h3 {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+/* ---- Glass surfaces ---- */
+.glass {
+  background: rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
+    0 24px 60px -28px rgba(0, 0, 0, 0.85);
+}
+.glass-soft {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Gradient text accent. */
+.text-gradient {
+  background: linear-gradient(100deg, #c4b5fd 0%, #8b5cf6 45%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Glow + lift on hover (cards). */
+.glow-hover {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease, border-color 0.35s ease;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .glow-hover:hover {
+    transform: translateY(-6px);
+    border-color: rgba(139, 92, 246, 0.55);
+    box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.35),
+      0 30px 60px -24px rgba(124, 58, 237, 0.55),
+      0 0 42px -10px rgba(34, 211, 238, 0.28);
+  }
+}
+
+/* ---- Ambient blobs ---- */
+.studio-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(72px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .studio-blob {
+    animation: blob-float 18s ease-in-out infinite;
+  }
+}
+@keyframes blob-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -28px) scale(1.12); }
+  66% { transform: translate(-28px, 22px) scale(0.93); }
+}
+
+/* Gentle vertical float (hero card). */
+@media (prefers-reduced-motion: no-preference) {
+  .float-y { animation: float-y 7s ease-in-out infinite; }
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+/* Pulsing availability dot. */
+.pulse-dot { position: relative; }
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 9999px;
+  background: #34d399;
+  opacity: 0.5;
+  animation: pulse-ring 2s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.7); opacity: 0.6; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+/* ---- Marquee ---- */
+.marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee__track { display: flex; width: max-content; gap: 0.75rem; }
+@media (prefers-reduced-motion: no-preference) {
+  .marquee__track { animation: marquee 30s linear infinite; }
+  .marquee:hover .marquee__track { animation-play-state: paused; }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ---- Scroll reveal: a smooth fade + rise + subtle zoom as each block
+   scrolls into view (triggered by an IntersectionObserver, with a failsafe
+   timer so content can never stay hidden). Reliable across all browsers. ---- */
+.studio-reveal { opacity: 0; transform: translateY(34px) scale(0.98); }
+@media (prefers-reduced-motion: no-preference) {
+  .studio-reveal {
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+.studio-reveal.in-view { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .studio-reveal { opacity: 1; transform: none; }
+}
+
+/* Work cover zoom on hover. */
+.work-card .work-cover,
+.work-card img { transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+@media (prefers-reduced-motion: no-preference) {
+  .work-card:hover .work-cover,
+  .work-card:hover img { transform: scale(1.06); }
+}

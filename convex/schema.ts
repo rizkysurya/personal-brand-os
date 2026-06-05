@@ -136,4 +136,37 @@ export default defineSchema({
     analyticsId: v.optional(v.string()),
     onboardedAt: v.optional(v.number()),
   }),
+
+  // Homepage "appearance" config (custom portfolio homepage) — singleton row.
+  // Hero copy, section headings, skills, stats, theme accent colours, and
+  // per-section show/hide + order. Edited from /admin (Tampilan Beranda).
+  homeConfig: defineTable({
+    heroEyebrow: v.optional(v.string()),
+    heroName: v.optional(v.string()),
+    heroHighlight: v.optional(v.string()),
+    heroSubtext: v.optional(v.string()),
+    heroPrimaryLabel: v.optional(v.string()),
+    heroPrimaryHref: v.optional(v.string()),
+    heroSecondaryLabel: v.optional(v.string()),
+    heroSecondaryHref: v.optional(v.string()),
+    showreelTitle: v.optional(v.string()),
+    showreelSubtitle: v.optional(v.string()),
+    workEyebrow: v.optional(v.string()),
+    workTitle: v.optional(v.string()),
+    aboutEyebrow: v.optional(v.string()),
+    aboutTitle: v.optional(v.string()),
+    aboutBody: v.optional(v.string()),
+    servicesEyebrow: v.optional(v.string()),
+    servicesTitle: v.optional(v.string()),
+    contactTitle: v.optional(v.string()),
+    contactSubtext: v.optional(v.string()),
+    contactPrimaryLabel: v.optional(v.string()),
+    skills: v.optional(v.array(v.string())),
+    stats: v.optional(v.array(v.object({ value: v.string(), label: v.string() }))),
+    accent: v.optional(v.string()),
+    accent2: v.optional(v.string()),
+    sections: v.optional(
+      v.array(v.object({ id: v.string(), enabled: v.boolean(), order: v.number() })),
+    ),
+  }),
 });

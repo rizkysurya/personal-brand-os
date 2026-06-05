@@ -38,10 +38,12 @@ export const metadata: Metadata = {
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <StoreProvider>
-      <SiteLoader brandLetter={DEFAULT_SITE_CONFIG.brandLetter} />
-      <PublicChrome>{children}</PublicChrome>
-      <AiChatFab brand={DEFAULT_SITE_CONFIG.brandName} />
-      <DemoRibbon />
+      <div className="dark theme-studio min-h-screen bg-background text-foreground">
+        <SiteLoader brandLetter={DEFAULT_SITE_CONFIG.brandLetter} />
+        <PublicChrome>{children}</PublicChrome>
+        <AiChatFab brand={DEFAULT_SITE_CONFIG.brandName} />
+        <DemoRibbon />
+      </div>
     </StoreProvider>
   );
 }
