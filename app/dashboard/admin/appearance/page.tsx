@@ -13,9 +13,10 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const SECTION_DEFS = [
   { id: "marquee", label: "Marquee skill" },
+  { id: "about", label: "Tentang (bio)" },
+  { id: "resume", label: "Pengalaman & Pendidikan" },
+  { id: "services", label: "Layanan / Keahlian" },
   { id: "work", label: "Galeri Karya" },
-  { id: "about", label: "Tentang" },
-  { id: "services", label: "Layanan" },
   { id: "contact", label: "Kontak" },
 ];
 
@@ -39,6 +40,8 @@ export default function AppearancePage() {
   const [form, setForm] = React.useState<Record<string, string>>({});
   const [skills, setSkills] = React.useState("");
   const [stats, setStats] = React.useState("");
+  const [expText, setExpText] = React.useState("");
+  const [eduText, setEduText] = React.useState("");
   const [accent, setAccent] = React.useState(DEFAULT_ACCENT);
   const [accent2, setAccent2] = React.useState(DEFAULT_ACCENT2);
   const [sections, setSections] = React.useState<Sec[]>([]);
@@ -55,6 +58,8 @@ export default function AppearancePage() {
     setForm(next);
     setSkills((cfg?.skills ?? []).join("\n"));
     setStats((cfg?.stats ?? []).map((s) => `${s.value} | ${s.label}`).join("\n"));
+    setExpText((cfg?.experience ?? []).map((e) => `${e.period} | ${e.role} | ${e.place}`).join("\n"));
+    setEduText((cfg?.education ?? []).map((e) => `${e.year} | ${e.title} | ${e.place}`).join("\n"));
     setAccent(cfg?.accent ?? DEFAULT_ACCENT);
     setAccent2(cfg?.accent2 ?? DEFAULT_ACCENT2);
     const existing: Sec[] = cfg?.sections ?? [];
@@ -82,6 +87,10 @@ export default function AppearancePage() {
           if (idx === -1) return { value: l, label: "" };
           return { value: l.slice(0, idx).trim(), label: l.slice(idx + 1).trim() };
         });
+      const parse3 = (text: string) =>
+        text.split("\n").map((l) => l.trim()).filter(Boolean).map((l) => l.split("|").map((p) => p.trim()));
+      const expArr = parse3(expText).map((p) => ({ period: p[0] ?? "", role: p[1] ?? "", place: p[2] ?? "" }));
+      const eduArr = parse3(eduText).map((p) => ({ year: p[0] ?? "", title: p[1] ?? "", place: p[2] ?? "" }));
       await save({
         heroEyebrow: form.heroEyebrow,
         heroName: form.heroName,
@@ -107,6 +116,8 @@ export default function AppearancePage() {
         contactPrimaryLabel: form.contactPrimaryLabel,
         skills: skillsArr,
         stats: statsArr,
+        experience: expArr,
+        education: eduArr,
         accent,
         accent2,
         sections,
@@ -187,6 +198,22 @@ export default function AppearancePage() {
             <div className="space-y-1.5">
               <Label>Statistik — format: angka | keterangan</Label>
               <Textarea value={stats} onChange={(e) => setStats(e.target.value)} rows={8} placeholder={"80+ | Proyek selesai\n40+ | Klien senang"} />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="border-border/60">
+        <CardContent className="space-y-4 p-6">
+          <h2 className="text-base font-semibold">Pengalaman &amp; Pendidikan</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <Label>Pengalaman kerja — 1 per baris (periode | jabatan | tempat)</Label>
+              <Textarea value={expText} onChange={(e) => setExpText(e.target.value)} rows={8} placeholder={"2018 – Sekarang | Freelance Designer | Freelance\n2022 – 2024 | Graphic Designer | PT Contoh"} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Pendidikan — 1 per baris (tahun | jurusan | sekolah)</Label>
+              <Textarea value={eduText} onChange={(e) => setEduText(e.target.value)} rows={8} placeholder={"2015 | Teknik Informatika (D3) | Universitas Contoh"} />
             </div>
           </div>
         </CardContent>

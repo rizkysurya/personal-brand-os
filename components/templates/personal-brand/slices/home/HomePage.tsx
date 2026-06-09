@@ -6,40 +6,53 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { usePortfolio, useServices } from "../../shared/store";
 
-/* --- Defaults: used when a homeConfig field is empty, so the page never looks
-   broken. The owner overrides any of these from /admin → Tampilan Beranda. --- */
+/* --- Defaults: shown when a homeConfig field is empty. Tuned for a graphic /
+   visual designer CV (Randy Fahmi). The owner overrides any from /admin. --- */
 type WorkCard = { title: string; category: string; cover?: string; slug?: string; tint: string };
 
 const PLACEHOLDER_WORK: WorkCard[] = [
-  { title: "Aurora — Brand Identity", category: "Branding", tint: "from-violet-500/40 to-fuchsia-500/30" },
-  { title: "Pulse — Title Sequence", category: "Motion", tint: "from-cyan-400/40 to-violet-500/30" },
-  { title: "Nebula — Social Campaign", category: "Graphic", tint: "from-fuchsia-500/40 to-indigo-500/30" },
-  { title: "Drift — Logo Animation", category: "Motion", tint: "from-indigo-500/40 to-cyan-400/30" },
-  { title: "Bloom — Packaging", category: "Graphic", tint: "from-purple-500/40 to-pink-500/30" },
-  { title: "Vortex — Explainer Video", category: "Motion", tint: "from-sky-400/40 to-violet-600/30" },
+  { title: "Social Media Campaign", category: "Graphic", tint: "from-amber-400/40 to-orange-500/30" },
+  { title: "Brand Identity", category: "Branding", tint: "from-violet-500/40 to-fuchsia-500/30" },
+  { title: "Brochure & Billboard", category: "Graphic", tint: "from-orange-400/40 to-pink-500/30" },
+  { title: "Product Photography", category: "Photo", tint: "from-cyan-400/40 to-violet-500/30" },
+  { title: "Promo Video", category: "Video", tint: "from-indigo-500/40 to-cyan-400/30" },
+  { title: "Company Profile", category: "Video", tint: "from-sky-400/40 to-violet-600/30" },
 ];
 
 const DEFAULT_SKILLS = [
-  "After Effects", "Cinema 4D", "Premiere Pro", "Photoshop", "Illustrator",
-  "Figma", "Blender", "Motion Design", "Branding", "3D", "Compositing", "Storyboard",
+  "Premiere Pro", "Illustrator", "Photoshop", "Lightroom", "After Effects",
+  "Canva", "CapCut", "Figma", "Graphic Design", "Photography", "Videography", "Branding",
 ];
 
 type SvcCard = { name: string; description: string; bullets: string[]; priceLabel?: string; featured?: boolean };
 
 const PLACEHOLDER_SERVICES: SvcCard[] = [
-  { name: "Brand & Identity", description: "Logo, sistem visual, dan panduan brand yang konsisten di semua kanal.", bullets: ["Logo & logomark", "Brand guideline", "Warna & tipografi"], priceLabel: "Mulai 2.5jt" },
-  { name: "Motion Graphics", description: "Animasi logo, title sequence, explainer, dan konten video yang hidup.", bullets: ["Logo animation", "Explainer / promo", "Title & lower-third"], priceLabel: "Mulai 3.5jt", featured: true },
-  { name: "Social & Content", description: "Desain konten media sosial yang scroll-stopping dan tetap on-brand.", bullets: ["Feed & story", "Carousel & reels", "Template kit"], priceLabel: "Mulai 1.5jt" },
+  { name: "Graphic Design", description: "Sosial media, brosur, billboard, & identitas visual yang bercerita.", bullets: ["Social media design", "Brosur & billboard", "Branding & logo"], featured: true },
+  { name: "Photographer", description: "Foto produk, acara, & potret yang rapi dan berkarakter.", bullets: ["Produk & katalog", "Event", "Portrait"] },
+  { name: "Videographer", description: "Produksi video dari konsep sampai jadi.", bullets: ["Shooting", "Company profile", "Konten sosial"] },
+  { name: "Video & Photo Editor", description: "Editing video & foto yang bersih dan nendang.", bullets: ["Video editing", "Color grading", "Retouch foto"] },
 ];
 
 const DEFAULT_STATS: Array<{ value: string; label: string }> = [
-  { value: "80+", label: "Proyek selesai" },
-  { value: "40+", label: "Klien senang" },
-  { value: "5 thn", label: "Pengalaman" },
-  { value: "12+", label: "Tools dikuasai" },
+  { value: "9+", label: "Tahun pengalaman" },
+  { value: "50+", label: "Proyek selesai" },
+  { value: "8", label: "Software dikuasai" },
+  { value: "4", label: "Bidang keahlian" },
 ];
 
-const CATEGORIES = ["Semua", "Branding", "Motion", "Graphic"] as const;
+const DEFAULT_EXPERIENCE = [
+  { period: "2018 – Sekarang", role: "IT & Graphic Design (Freelance)", place: "Freelance" },
+  { period: "Agu 2022 – Jun 2024", role: "Graphic Design & Content Creator", place: "PT Sepokat Menjala Berkat" },
+  { period: "Okt 2020 – Agu 2021", role: "Graphic Design", place: "Jember Vini Zoo" },
+  { period: "Mei 2019 – Sep 2020", role: "IT Supervisor & Graphic Design", place: "Swiss Hotel Kemayoran, Jakarta" },
+  { period: "Mei 2016 – Mei 2017", role: "IT Staff", place: "PT Hayuda Teknologi Indonesia" },
+];
+
+const DEFAULT_EDUCATION = [
+  { year: "2015", title: "Teknik Informatika (D3)", place: "Universitas Muhammadiyah Jember" },
+];
+
+const CATEGORIES = ["Semua", "Graphic", "Photo", "Video"] as const;
 type Category = (typeof CATEGORIES)[number];
 
 const GRADIENT_BTN =
@@ -73,14 +86,15 @@ function useScrollReveal(deps: React.DependencyList) {
   }, deps);
 }
 
-const DEFAULT_ORDER = ["marquee", "work", "about", "services", "contact"];
-// Minimal-by-default: a clean CV + portfolio site (just work + contact show).
-// The owner re-enables any section from /admin (Tampilan Beranda → show/hide).
+const DEFAULT_ORDER = ["marquee", "about", "resume", "services", "work", "contact"];
+// CV-style portfolio: About + Experience + Services + Work + Contact on by
+// default. Marquee off. Owner re-toggles any from /admin (Tampilan Beranda).
 const DEFAULT_ENABLED: Record<string, boolean> = {
   marquee: false,
+  about: true,
+  resume: true,
+  services: true,
   work: true,
-  about: false,
-  services: false,
   contact: true,
 };
 
@@ -123,7 +137,7 @@ export function HomePage() {
   const services: SvcCard[] = React.useMemo(() => {
     const rows = servicesRaw as unknown as Array<Record<string, unknown>>;
     if (rows && rows.length > 0) {
-      return rows.slice(0, 3).map((s) => ({
+      return rows.slice(0, 4).map((s) => ({
         name: String(s.name ?? "Layanan"),
         description: String(s.description ?? ""),
         bullets: Array.isArray(s.bullets) ? (s.bullets as string[]).slice(0, 4) : [],
@@ -136,6 +150,8 @@ export function HomePage() {
 
   const skills = cfg?.skills && cfg.skills.length > 0 ? cfg.skills : DEFAULT_SKILLS;
   const stats = cfg?.stats && cfg.stats.length > 0 ? cfg.stats : DEFAULT_STATS;
+  const education = cfg?.education && cfg.education.length > 0 ? cfg.education : DEFAULT_EDUCATION;
+  const experience = cfg?.experience && cfg.experience.length > 0 ? cfg.experience : DEFAULT_EXPERIENCE;
 
   const [filter, setFilter] = React.useState<Category>("Semua");
   const [reelOpen, setReelOpen] = React.useState(false);
@@ -146,7 +162,7 @@ export function HomePage() {
 
   if (!mounted) return null;
 
-  const ownerName = settings?.ownerName || settings?.siteName || "Studio Kamu";
+  const ownerName = settings?.ownerName || settings?.siteName || "Nama Kamu";
   const name = cfg?.heroName || ownerName;
   const email = settings?.contactEmail;
   const contactHref = email ? `mailto:${email}` : "/contact";
@@ -156,29 +172,29 @@ export function HomePage() {
   const cvUrl = cfg?.cvUrl || "";
 
   const C = {
-    heroEyebrow: cfg?.heroEyebrow || "Tersedia untuk proyek freelance",
-    heroHighlight: cfg?.heroHighlight || "Graphic & Motion Designer.",
+    heroEyebrow: cfg?.heroEyebrow || "Creative Visual · Terbuka untuk peluang baru",
+    heroHighlight: cfg?.heroHighlight || "Graphic Designer & Visual Creator",
     heroSubtext:
       cfg?.heroSubtext ||
       settings?.tagline ||
-      "Aku bantu brand & cerita tampil lewat desain grafis dan motion yang berani, rapi, dan berkesan.",
+      "Graphic designer & IT otodidak dengan 9+ tahun pengalaman — bikin visual yang bukan cuma enak dilihat, tapi bercerita.",
     heroPrimaryLabel: cfg?.heroPrimaryLabel || "Lihat Karya",
     heroPrimaryHref: cfg?.heroPrimaryHref || "#work",
     heroSecondaryLabel: cfg?.heroSecondaryLabel || "Hubungi Saya",
     heroSecondaryHref: cfg?.heroSecondaryHref || contactHref,
-    showreelTitle: cfg?.showreelTitle || "Showreel 2026",
-    showreelSubtitle: cfg?.showreelSubtitle || "Kompilasi motion & branding terbaik — 90 detik",
+    showreelTitle: cfg?.showreelTitle || "Showreel",
+    showreelSubtitle: cfg?.showreelSubtitle || "Kompilasi karya terbaik",
     workEyebrow: cfg?.workEyebrow || "Portfolio",
     workTitle: cfg?.workTitle || "Karya Pilihan",
-    aboutEyebrow: cfg?.aboutEyebrow || "Tentang",
-    aboutTitle: cfg?.aboutTitle || "Desain yang bukan cuma cantik — tapi berfungsi.",
+    aboutEyebrow: cfg?.aboutEyebrow || "Hello",
+    aboutTitle: cfg?.aboutTitle || "Visual yang bukan cuma cantik — tapi bercerita.",
     aboutBody:
       cfg?.aboutBody ||
-      `Aku ${name}, seorang Graphic & Motion Designer. Buatku, desain hebat lahir dari ide yang jelas dan eksekusi yang rapi — dari identitas brand sampai animasi yang bikin pesanmu nempel.`,
-    servicesEyebrow: cfg?.servicesEyebrow || "Layanan",
+      `Aku ${name}, graphic designer & IT otodidak dengan pengalaman lebih dari 9 tahun. Aku suka bikin visual yang nggak cuma enak dilihat — tapi bercerita. Dari konten media sosial sampai brosur dan billboard, aku senang mewujudkan ide jadi nyata. Aku juga mengeksplorasi fotografi dan videografi untuk menambah kedalaman karyaku. Buatku, desain itu soal menghubungkan ide dengan orang lewat cara yang kreatif.`,
+    servicesEyebrow: cfg?.servicesEyebrow || "Keahlian",
     servicesTitle: cfg?.servicesTitle || "Yang bisa aku bantu",
-    contactTitle: cfg?.contactTitle || "Punya proyek? Yuk bikin sesuatu yang keren.",
-    contactSubtext: cfg?.contactSubtext || "Terbuka untuk kolaborasi branding, motion graphics, dan konten visual.",
+    contactTitle: cfg?.contactTitle || "Let's work together.",
+    contactSubtext: cfg?.contactSubtext || "Terbuka untuk pekerjaan, proyek desain, foto, & video. Yuk ngobrol.",
     contactPrimaryLabel: cfg?.contactPrimaryLabel || (email ? "Email Saya" : "Hubungi Saya"),
   };
 
@@ -199,6 +215,98 @@ export function HomePage() {
               <span key={i} className="glass-soft whitespace-nowrap rounded-full px-5 py-2 text-sm text-white/70">{s}</span>
             ))}
           </div>
+        </div>
+      </section>
+    ),
+    about: () => (
+      <section id="about" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
+        <div className="glass studio-reveal grid gap-10 rounded-3xl p-8 md:grid-cols-5 md:p-12">
+          <div className="md:col-span-3">
+            <p className={EYEBROW}>{C.aboutEyebrow}</p>
+            <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">{C.aboutTitle}</h2>
+            <p className="mt-5 max-w-xl whitespace-pre-line leading-relaxed text-white/65">{C.aboutBody}</p>
+            <div className="mt-7 flex flex-wrap gap-2">
+              {skills.slice(0, 10).map((s) => (
+                <span key={s} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white/70">{s}</span>
+              ))}
+            </div>
+          </div>
+          <div className="md:col-span-2">
+            <div className="grid h-full grid-cols-2 gap-4">
+              {stats.map((st, i) => (
+                <div key={i} className="glass-soft flex flex-col justify-center rounded-2xl p-5">
+                  <div className="text-3xl font-bold text-white">{st.value}</div>
+                  <div className="mt-1 text-xs text-white/55">{st.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    ),
+    resume: () => (
+      <section id="resume" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
+        <div className="studio-reveal text-center">
+          <p className={EYEBROW}>Perjalanan</p>
+          <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">Pengalaman &amp; Pendidikan</h2>
+        </div>
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className="studio-reveal glass rounded-2xl p-7">
+            <h3 className="text-lg font-semibold text-white">Pengalaman Kerja</h3>
+            <ul className="mt-5 space-y-5">
+              {experience.map((e, i) => (
+                <li key={i} className="relative border-l border-white/10 pl-5">
+                  <span className="absolute -left-[5px] top-1.5 size-2.5 rounded-full" style={{ background: "var(--accent-1)" }} />
+                  <div className="text-sm font-semibold text-white">{e.role}</div>
+                  <div className="text-sm text-white/60">{e.place}</div>
+                  <div className="mt-0.5 text-xs text-white/40">{e.period}</div>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="studio-reveal glass rounded-2xl p-7" style={{ transitionDelay: "80ms" }}>
+            <h3 className="text-lg font-semibold text-white">Pendidikan</h3>
+            <ul className="mt-5 space-y-5">
+              {education.map((e, i) => (
+                <li key={i} className="relative border-l border-white/10 pl-5">
+                  <span className="absolute -left-[5px] top-1.5 size-2.5 rounded-full" style={{ background: "var(--accent-2)" }} />
+                  <div className="text-sm font-semibold text-white">{e.title}</div>
+                  <div className="text-sm text-white/60">{e.place}</div>
+                  <div className="mt-0.5 text-xs text-white/40">{e.year}</div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+    ),
+    services: () => (
+      <section id="services" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
+        <div className="studio-reveal text-center">
+          <p className={EYEBROW}>{C.servicesEyebrow}</p>
+          <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">{C.servicesTitle}</h2>
+        </div>
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {services.map((s, i) => (
+            <div
+              key={i}
+              className="studio-reveal glass glow-hover relative flex flex-col rounded-2xl p-6"
+              style={{ transitionDelay: `${i * 70}ms`, ...(s.featured ? { boxShadow: "inset 0 0 0 1px color-mix(in oklab, var(--accent-1) 45%, transparent)" } : {}) }}
+            >
+              <h3 className="text-lg font-semibold text-white">{s.name}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-white/60">{s.description}</p>
+              <ul className="mt-5 space-y-2">
+                {s.bullets.map((b) => (
+                  <li key={b} className="flex items-center gap-2 text-sm text-white/75">
+                    <span className="text-[var(--accent-1)]">✦</span> {b}
+                  </li>
+                ))}
+              </ul>
+              {s.priceLabel ? (
+                <div className="mt-6 border-t border-white/10 pt-4 text-sm font-semibold text-white/90">{s.priceLabel}</div>
+              ) : null}
+            </div>
+          ))}
         </div>
       </section>
     ),
@@ -257,65 +365,6 @@ export function HomePage() {
         </div>
       </section>
     ),
-    about: () => (
-      <section id="about" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
-        <div className="glass studio-reveal grid gap-10 rounded-3xl p-8 md:grid-cols-5 md:p-12">
-          <div className="md:col-span-3">
-            <p className={EYEBROW}>{C.aboutEyebrow}</p>
-            <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">{C.aboutTitle}</h2>
-            <p className="mt-5 max-w-xl whitespace-pre-line leading-relaxed text-white/65">{C.aboutBody}</p>
-            <div className="mt-7 flex flex-wrap gap-2">
-              {skills.slice(0, 8).map((s) => (
-                <span key={s} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white/70">{s}</span>
-              ))}
-            </div>
-          </div>
-          <div className="md:col-span-2">
-            <div className="grid h-full grid-cols-2 gap-4">
-              {stats.map((st, i) => (
-                <div key={i} className="glass-soft flex flex-col justify-center rounded-2xl p-5">
-                  <div className="text-3xl font-bold text-white">{st.value}</div>
-                  <div className="mt-1 text-xs text-white/55">{st.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-    ),
-    services: () => (
-      <section id="services" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
-        <div className="studio-reveal text-center">
-          <p className={EYEBROW}>{C.servicesEyebrow}</p>
-          <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">{C.servicesTitle}</h2>
-        </div>
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {services.map((s, i) => (
-            <div
-              key={i}
-              className="studio-reveal glass glow-hover relative flex flex-col rounded-2xl p-7"
-              style={{ transitionDelay: `${i * 80}ms`, ...(s.featured ? { boxShadow: "inset 0 0 0 1px color-mix(in oklab, var(--accent-1) 45%, transparent)" } : {}) }}
-            >
-              {s.featured ? (
-                <span className="absolute -top-3 left-7 rounded-full bg-linear-to-r from-[var(--accent-1)] to-[var(--accent-2)] px-3 py-1 text-xs font-semibold text-white">Paling diminati</span>
-              ) : null}
-              <h3 className="text-xl font-semibold text-white">{s.name}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-white/60">{s.description}</p>
-              <ul className="mt-5 space-y-2">
-                {s.bullets.map((b) => (
-                  <li key={b} className="flex items-center gap-2 text-sm text-white/75">
-                    <span className="text-[var(--accent-1)]">✦</span> {b}
-                  </li>
-                ))}
-              </ul>
-              {s.priceLabel ? (
-                <div className="mt-6 border-t border-white/10 pt-4 text-sm font-semibold text-white/90">{s.priceLabel}</div>
-              ) : null}
-            </div>
-          ))}
-        </div>
-      </section>
-    ),
     contact: () => (
       <section id="contact" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 pb-28 pt-10">
         <div className="studio-reveal glass relative overflow-hidden rounded-3xl px-8 py-16 text-center sm:px-12">
@@ -324,7 +373,9 @@ export function HomePage() {
           <p className="mx-auto mt-4 max-w-md text-white/65">{C.contactSubtext}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a href={contactHref} className={GRADIENT_BTN.replace("px-6", "px-7")}>{C.contactPrimaryLabel}</a>
-            <Link href="/portfolio" className={GLASS_BTN.replace("px-6", "px-7")}>Lihat Semua Karya</Link>
+            {cvUrl ? (
+              <a href={cvUrl} target="_blank" rel="noopener noreferrer" className={GLASS_BTN.replace("px-6", "px-7")}>↓ Download CV</a>
+            ) : null}
           </div>
         </div>
       </section>
@@ -350,7 +401,7 @@ export function HomePage() {
         />
       </div>
 
-      {/* HERO — minimalist, photo-less, portfolio-focused (Anid-style) */}
+      {/* HERO — minimalist, photo-less, portfolio-focused */}
       <section className="hero-parallax relative mx-auto flex min-h-[80vh] max-w-5xl flex-col items-center justify-center px-6 pb-20 pt-24 text-center sm:pt-28">
         <span className="reveal inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-wide text-white/80 backdrop-blur-md" style={{ animationDelay: "0s" }}>
           <span className="pulse-dot inline-block size-1.5 rounded-full bg-emerald-400" />

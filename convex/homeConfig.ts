@@ -44,6 +44,8 @@ const FIELDS = {
   // theme accent colours
   accent: v.optional(v.string()),
   accent2: v.optional(v.string()),
+  education: v.optional(v.array(v.object({ year: v.string(), title: v.string(), place: v.string() }))),
+  experience: v.optional(v.array(v.object({ period: v.string(), role: v.string(), place: v.string() }))),
   // per-section show/hide + order
   sections: v.optional(
     v.array(v.object({ id: v.string(), enabled: v.boolean(), order: v.number() })),
