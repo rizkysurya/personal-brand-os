@@ -4,7 +4,6 @@ import { StoreProvider } from "@/components/templates/personal-brand/shared/stor
 import { SiteLoader } from "@/components/site-loader";
 import { DemoRibbon } from "@/components/demo-ribbon";
 import { PublicChrome } from "@/components/public-chrome";
-import { AiChatFab } from "@/components/ai-chat-fab";
 import { DEFAULT_SITE_CONFIG } from "@/components/templates/personal-brand/shared/site-config";
 
 const c = DEFAULT_SITE_CONFIG;
@@ -41,7 +40,6 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       <div className="dark theme-studio min-h-screen bg-background text-foreground">
         <SiteLoader brandLetter={DEFAULT_SITE_CONFIG.brandLetter} />
         <PublicChrome>{children}</PublicChrome>
-        <AiChatFab brand={DEFAULT_SITE_CONFIG.brandName} />
         <DemoRibbon />
       </div>
     </StoreProvider>
