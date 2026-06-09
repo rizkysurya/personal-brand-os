@@ -286,11 +286,11 @@ export function HomePage() {
           <p className={EYEBROW}>{C.servicesEyebrow}</p>
           <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">{C.servicesTitle}</h2>
         </div>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 flex flex-wrap justify-center gap-5">
           {services.map((s, i) => (
             <div
               key={i}
-              className="studio-reveal glass glow-hover relative flex flex-col rounded-2xl p-6"
+              className="studio-reveal glass glow-hover relative flex w-full flex-col rounded-2xl p-6 sm:w-80"
               style={{ transitionDelay: `${i * 70}ms`, ...(s.featured ? { boxShadow: "inset 0 0 0 1px color-mix(in oklab, var(--accent-1) 45%, transparent)" } : {}) }}
             >
               <h3 className="text-lg font-semibold text-white">{s.name}</h3>
@@ -302,9 +302,6 @@ export function HomePage() {
                   </li>
                 ))}
               </ul>
-              {s.priceLabel ? (
-                <div className="mt-6 border-t border-white/10 pt-4 text-sm font-semibold text-white/90">{s.priceLabel}</div>
-              ) : null}
             </div>
           ))}
         </div>
