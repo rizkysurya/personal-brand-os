@@ -20,7 +20,7 @@ export function PublicChrome({ children }: { children: ReactNode }) {
     brandName,
     brandLetter: brandName.charAt(0).toUpperCase() || DEFAULT_SITE_CONFIG.brandLetter,
     description: "",
-    logoUrl: s?.logoUrl || undefined,
+    logoUrl: s?.logoUrl || "/logo.svg",
   };
 
   return (

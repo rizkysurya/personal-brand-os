@@ -6,53 +6,58 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { usePortfolio, useServices } from "../../shared/store";
 
-/* --- Defaults: shown when a homeConfig field is empty. Tuned for a graphic /
-   visual designer CV (Randy Fahmi). The owner overrides any from /admin. --- */
+/* --- Defaults: shown when a homeConfig field is empty. Tuned for a Motion
+   Graphic Designer CV (Rizky Surya Pratama). The owner overrides any from
+   /admin (Tampilan Beranda / Settings / Services / Portfolio). --- */
 type WorkCard = { title: string; category: string; cover?: string; slug?: string; tint: string };
 
 const PLACEHOLDER_WORK: WorkCard[] = [
-  { title: "Social Media Campaign", category: "Graphic", tint: "from-amber-400/40 to-orange-500/30" },
-  { title: "Brand Identity", category: "Branding", tint: "from-violet-500/40 to-fuchsia-500/30" },
-  { title: "Brochure & Billboard", category: "Graphic", tint: "from-orange-400/40 to-pink-500/30" },
-  { title: "Product Photography", category: "Photo", tint: "from-cyan-400/40 to-violet-500/30" },
-  { title: "Promo Video", category: "Video", tint: "from-indigo-500/40 to-cyan-400/30" },
-  { title: "Company Profile", category: "Video", tint: "from-sky-400/40 to-violet-600/30" },
+  { title: "Financial Explainer Video", category: "Motion", tint: "from-indigo-500/40 to-sky-400/30" },
+  { title: "2D Character Animation", category: "Animation", tint: "from-blue-500/40 to-cyan-400/30" },
+  { title: "Lottie & GIF Animation", category: "Motion", tint: "from-sky-500/40 to-indigo-400/30" },
+  { title: "Educational Motion Graphics", category: "Motion", tint: "from-cyan-400/40 to-blue-500/30" },
+  { title: "Brand Identity in Motion", category: "Animation", tint: "from-indigo-400/40 to-blue-600/30" },
+  { title: "Banner & Flyer Design", category: "Print", tint: "from-sky-400/40 to-indigo-500/30" },
 ];
 
 const DEFAULT_SKILLS = [
-  "Premiere Pro", "Illustrator", "Photoshop", "Lightroom", "After Effects",
-  "Canva", "CapCut", "Figma", "Graphic Design", "Photography", "Videography", "Branding",
+  "After Effects", "Adobe Animate", "Lottie Files", "GIF Animation", "Illustrator",
+  "Photoshop", "Premiere Pro", "Sound Design", "Color Grading", "2D Animation",
+  "Storyboarding", "Brand Identity",
 ];
 
 type SvcCard = { name: string; description: string; bullets: string[]; priceLabel?: string; featured?: boolean };
 
 const PLACEHOLDER_SERVICES: SvcCard[] = [
-  { name: "Graphic Design", description: "Sosial media, brosur, billboard, & identitas visual yang bercerita.", bullets: ["Social media design", "Brosur & billboard", "Branding & logo"], featured: true },
-  { name: "Photographer", description: "Foto produk, acara, & potret yang rapi dan berkarakter.", bullets: ["Produk & katalog", "Event", "Portrait"] },
-  { name: "Videographer", description: "Produksi video dari konsep sampai jadi.", bullets: ["Shooting", "Company profile", "Konten sosial"] },
-  { name: "Video & Photo Editor", description: "Editing video & foto yang bersih dan nendang.", bullets: ["Video editing", "Color grading", "Retouch foto"] },
+  { name: "Explainer Videos", description: "Clear, engaging explainer videos that turn complex topics into simple, memorable visual stories.", bullets: ["Script to screen", "2D animation & motion", "Sound design & delivery"], featured: true },
+  { name: "2D Animation", description: "Smooth, polished 2D character and motion animation, built around your brand.", bullets: ["Character animation", "Motion graphics", "Brand-consistent style"] },
+  { name: "GIF & Lottie", description: "Lightweight animated assets — GIFs and Lottie files — for web, app, and social.", bullets: ["Lottie production", "Animated GIFs", "Optimized for web & app"] },
+  { name: "Print Design", description: "Production-ready print design — banners, flyers, and promotional materials.", bullets: ["Banners & flyers", "Print-ready files", "Consistent branding"] },
 ];
 
 const DEFAULT_STATS: Array<{ value: string; label: string }> = [
-  { value: "9+", label: "Tahun pengalaman" },
-  { value: "50+", label: "Proyek selesai" },
-  { value: "8", label: "Software dikuasai" },
-  { value: "4", label: "Bidang keahlian" },
+  { value: "6+", label: "Years of experience" },
+  { value: "50+", label: "Projects delivered" },
+  { value: "40%", label: "Avg. engagement lift" },
+  { value: "9", label: "Tools mastered" },
 ];
 
 const DEFAULT_EXPERIENCE = [
-  { period: "2018 – Sekarang", role: "IT & Graphic Design (Freelance)", place: "Freelance" },
-  { period: "Agu 2022 – Jun 2024", role: "Graphic Design & Content Creator", place: "PT Sepokat Menjala Berkat" },
-  { period: "Okt 2020 – Agu 2021", role: "Graphic Design", place: "Jember Vini Zoo" },
-  { period: "Mei 2019 – Sep 2020", role: "IT Supervisor & Graphic Design", place: "Swiss Hotel Kemayoran, Jakarta" },
-  { period: "Mei 2016 – Mei 2017", role: "IT Staff", place: "PT Hayuda Teknologi Indonesia" },
+  { period: "Nov 2025 – Present", role: "Motion Graphic Designer", place: "Tuntun Sekuritas Indonesia" },
+  { period: "Aug 2025 – Nov 2025", role: "Motion Graphic Designer (Project-Based)", place: "PT Teknologi Legal Bersama (Hukummu)" },
+  { period: "Feb 2021 – Aug 2025", role: "Graphic Designer & Animator", place: "Zeus Animation" },
+  { period: "Jul 2020 – Feb 2021", role: "Graphic Designer (Freelance)", place: "Freelance" },
+  { period: "Jul 2019 – Jul 2020", role: "Graphic Designer", place: "CV Mitra Utama Digital Printing" },
 ];
 
-const DEFAULT_EDUCATION = [
-  { year: "2015", title: "Teknik Informatika (D3)", place: "Universitas Muhammadiyah Jember" },
+const DEFAULT_SKILL_GROUPS = [
+  { label: "Motion & Animation", items: "After Effects · Adobe Animate · Lottie · GIF Animation" },
+  { label: "Design", items: "Illustrator · Photoshop" },
+  { label: "Post-Production", items: "Premiere Pro · Sound Design · Color Grading" },
+  { label: "Specializations", items: "Explainer Videos · 2D Animation · Visual Storytelling · Brand Identity" },
 ];
 
-const CATEGORIES = ["Semua", "Graphic", "Photo", "Video"] as const;
+const CATEGORIES = ["All", "Motion", "Animation", "Print"] as const;
 type Category = (typeof CATEGORIES)[number];
 
 const GRADIENT_BTN =
@@ -124,8 +129,8 @@ export function HomePage() {
     const rows = portfolioRaw as unknown as Array<Record<string, unknown>>;
     if (rows && rows.length > 0) {
       return rows.slice(0, 6).map((p, i) => ({
-        title: String(p.title ?? "Karya"),
-        category: String(p.category ?? "Karya"),
+        title: String(p.title ?? "Project"),
+        category: String(p.category ?? "Work"),
         cover: typeof p.cover === "string" && p.cover ? p.cover : undefined,
         slug: typeof p.slug === "string" ? p.slug : "",
         tint: PLACEHOLDER_WORK[i % PLACEHOLDER_WORK.length].tint,
@@ -138,7 +143,7 @@ export function HomePage() {
     const rows = servicesRaw as unknown as Array<Record<string, unknown>>;
     if (rows && rows.length > 0) {
       return rows.slice(0, 4).map((s) => ({
-        name: String(s.name ?? "Layanan"),
+        name: String(s.name ?? "Service"),
         description: String(s.description ?? ""),
         bullets: Array.isArray(s.bullets) ? (s.bullets as string[]).slice(0, 4) : [],
         priceLabel: typeof s.priceLabel === "string" ? s.priceLabel : undefined,
@@ -150,52 +155,52 @@ export function HomePage() {
 
   const skills = cfg?.skills && cfg.skills.length > 0 ? cfg.skills : DEFAULT_SKILLS;
   const stats = cfg?.stats && cfg.stats.length > 0 ? cfg.stats : DEFAULT_STATS;
-  const education = cfg?.education && cfg.education.length > 0 ? cfg.education : DEFAULT_EDUCATION;
+  const skillGroups = DEFAULT_SKILL_GROUPS;
   const experience = cfg?.experience && cfg.experience.length > 0 ? cfg.experience : DEFAULT_EXPERIENCE;
 
-  const [filter, setFilter] = React.useState<Category>("Semua");
+  const [filter, setFilter] = React.useState<Category>("All");
   const [reelOpen, setReelOpen] = React.useState(false);
   const filteredWork =
-    filter === "Semua" ? work : work.filter((w) => w.category.toLowerCase().includes(filter.toLowerCase()));
+    filter === "All" ? work : work.filter((w) => w.category.toLowerCase().includes(filter.toLowerCase()));
 
   useScrollReveal([mounted, work.length, services.length, filter, cfg]);
 
   if (!mounted) return null;
 
-  const ownerName = settings?.ownerName || settings?.siteName || "Nama Kamu";
+  const ownerName = settings?.ownerName || settings?.siteName || "Rizky Surya Pratama";
   const name = cfg?.heroName || ownerName;
   const email = settings?.contactEmail;
   const contactHref = email ? `mailto:${email}` : "/contact";
-  const accent = cfg?.accent || "#5b61e6";
-  const accent2 = cfg?.accent2 || "#7fc0ea";
+  const accent = cfg?.accent || "#5456f6";
+  const accent2 = cfg?.accent2 || "#7fc4e0";
   const showreelUrl = cfg?.showreelUrl || "";
   const cvUrl = cfg?.cvUrl || "";
 
   const C = {
-    heroEyebrow: cfg?.heroEyebrow || "Creative Visual · Terbuka untuk peluang baru",
-    heroHighlight: cfg?.heroHighlight || "Graphic Designer & Visual Creator",
+    heroEyebrow: cfg?.heroEyebrow || "Motion Graphic Designer · Open to opportunities",
+    heroHighlight: cfg?.heroHighlight || "Motion Graphic Designer",
     heroSubtext:
       cfg?.heroSubtext ||
       settings?.tagline ||
-      "Graphic designer & IT otodidak dengan 9+ tahun pengalaman — bikin visual yang bukan cuma enak dilihat, tapi bercerita.",
-    heroPrimaryLabel: cfg?.heroPrimaryLabel || "Lihat Karya",
+      "I turn complex ideas into clear, compelling motion — explainer videos, 2D animation, and educational content — with 6+ years across studio, in-house, and freelance work.",
+    heroPrimaryLabel: cfg?.heroPrimaryLabel || "View Work",
     heroPrimaryHref: cfg?.heroPrimaryHref || "#work",
-    heroSecondaryLabel: cfg?.heroSecondaryLabel || "Hubungi Saya",
+    heroSecondaryLabel: cfg?.heroSecondaryLabel || "Get in Touch",
     heroSecondaryHref: cfg?.heroSecondaryHref || contactHref,
     showreelTitle: cfg?.showreelTitle || "Showreel",
-    showreelSubtitle: cfg?.showreelSubtitle || "Kompilasi karya terbaik",
+    showreelSubtitle: cfg?.showreelSubtitle || "A reel of selected motion work",
     workEyebrow: cfg?.workEyebrow || "Portfolio",
-    workTitle: cfg?.workTitle || "Karya Pilihan",
-    aboutEyebrow: cfg?.aboutEyebrow || "Hello",
-    aboutTitle: cfg?.aboutTitle || "Visual yang bukan cuma cantik — tapi bercerita.",
+    workTitle: cfg?.workTitle || "Selected Work",
+    aboutEyebrow: cfg?.aboutEyebrow || "About",
+    aboutTitle: cfg?.aboutTitle || "Turning complex ideas into clear, compelling motion.",
     aboutBody:
       cfg?.aboutBody ||
-      `Aku ${name}, graphic designer & IT otodidak dengan pengalaman lebih dari 9 tahun. Aku suka bikin visual yang nggak cuma enak dilihat — tapi bercerita. Dari konten media sosial sampai brosur dan billboard, aku senang mewujudkan ide jadi nyata. Aku juga mengeksplorasi fotografi dan videografi untuk menambah kedalaman karyaku. Buatku, desain itu soal menghubungkan ide dengan orang lewat cara yang kreatif.`,
-    servicesEyebrow: cfg?.servicesEyebrow || "Keahlian",
-    servicesTitle: cfg?.servicesTitle || "Yang bisa aku bantu",
+      `I am a Motion Graphic Designer with 6+ years of experience creating engaging visual content across agency, in-house, and freelance environments. Specialized in explainer videos, 2D animation, GIF and Lottie file production, and educational motion graphics. Skilled in translating complex topics into clear, compelling visual stories — with a strong focus on smooth, polished motion and consistent brand identity. Experienced in managing end-to-end production: from research and storyboarding to final rendering and delivery. Outside of animation, I also work independently on print design projects such as banners and flyers, taking full responsibility from layout to final design.`,
+    servicesEyebrow: cfg?.servicesEyebrow || "Services",
+    servicesTitle: cfg?.servicesTitle || "What I do",
     contactTitle: cfg?.contactTitle || "Let's work together.",
-    contactSubtext: cfg?.contactSubtext || "Terbuka untuk pekerjaan, proyek desain, foto, & video. Yuk ngobrol.",
-    contactPrimaryLabel: cfg?.contactPrimaryLabel || (email ? "Email Saya" : "Hubungi Saya"),
+    contactSubtext: cfg?.contactSubtext || "Available for motion graphics, explainer videos, animation, and design projects. Let's talk.",
+    contactPrimaryLabel: cfg?.contactPrimaryLabel || (email ? "Email Me" : "Get in Touch"),
   };
 
   const sectionCfg = cfg?.sections ?? [];
@@ -247,12 +252,12 @@ export function HomePage() {
     resume: () => (
       <section id="resume" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
         <div className="studio-reveal text-center">
-          <p className={EYEBROW}>Perjalanan</p>
-          <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">Pengalaman &amp; Pendidikan</h2>
+          <p className={EYEBROW}>Career</p>
+          <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">Experience &amp; Skills</h2>
         </div>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           <div className="studio-reveal glass rounded-2xl p-7">
-            <h3 className="text-lg font-semibold text-white">Pengalaman Kerja</h3>
+            <h3 className="text-lg font-semibold text-white">Work Experience</h3>
             <ul className="mt-5 space-y-5">
               {experience.map((e, i) => (
                 <li key={i} className="relative border-l border-white/10 pl-5">
@@ -265,17 +270,16 @@ export function HomePage() {
             </ul>
           </div>
           <div className="studio-reveal glass rounded-2xl p-7" style={{ transitionDelay: "80ms" }}>
-            <h3 className="text-lg font-semibold text-white">Pendidikan</h3>
-            <ul className="mt-5 space-y-5">
-              {education.map((e, i) => (
-                <li key={i} className="relative border-l border-white/10 pl-5">
+            <h3 className="text-lg font-semibold text-white">Technical Skills</h3>
+            <div className="mt-5 space-y-5">
+              {skillGroups.map((g, i) => (
+                <div key={i} className="relative border-l border-white/10 pl-5">
                   <span className="absolute -left-[5px] top-1.5 size-2.5 rounded-full" style={{ background: "var(--accent-2)" }} />
-                  <div className="text-sm font-semibold text-white">{e.title}</div>
-                  <div className="text-sm text-white/60">{e.place}</div>
-                  <div className="mt-0.5 text-xs text-white/40">{e.year}</div>
-                </li>
+                  <div className="text-xs font-semibold uppercase tracking-wider text-[var(--accent-2)]">{g.label}</div>
+                  <div className="mt-1 text-sm leading-relaxed text-white/70">{g.items}</div>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -385,7 +389,7 @@ export function HomePage() {
       <div aria-hidden className="absolute inset-0 -z-10 overflow-hidden">
         <div className="studio-blob -left-40 -top-40 h-[42rem] w-[42rem]" style={{ background: "radial-gradient(circle, var(--accent-1), transparent 60%)" }} />
         <div className="studio-blob -right-32 top-32 h-[38rem] w-[38rem]" style={{ background: "radial-gradient(circle, var(--accent-2), transparent 60%)", animationDelay: "-6s" }} />
-        <div className="studio-blob left-1/3 top-[58%] h-[34rem] w-[34rem]" style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--accent-1) 60%, #d946ef), transparent 60%)", animationDelay: "-11s", opacity: 0.3 }} />
+        <div className="studio-blob left-1/3 top-[58%] h-[34rem] w-[34rem]" style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--accent-1) 60%, #4f8ae0), transparent 60%)", animationDelay: "-11s", opacity: 0.3 }} />
         <div
           className="absolute inset-0"
           style={{
@@ -406,7 +410,7 @@ export function HomePage() {
         </span>
 
         <p className="reveal mt-8 text-lg font-medium text-[var(--accent-1)] sm:text-xl" style={{ animationDelay: "0.05s" }}>
-          Halo, aku 👋
+          Hi, I&apos;m 👋
         </p>
         <h1 className="reveal mt-1 text-5xl font-bold leading-[1.02] text-white sm:text-7xl md:text-8xl" style={{ animationDelay: "0.1s" }}>
           {name}
@@ -427,7 +431,7 @@ export function HomePage() {
             <a href={cvUrl} target="_blank" rel="noopener noreferrer" className={GLASS_BTN}>↓ Download CV</a>
           ) : null}
           {showreelUrl ? (
-            <button type="button" onClick={() => setReelOpen(true)} className={GLASS_BTN}>▶ Lihat Showreel</button>
+            <button type="button" onClick={() => setReelOpen(true)} className={GLASS_BTN}>▶ Watch Showreel</button>
           ) : null}
         </div>
       </section>
@@ -441,7 +445,7 @@ export function HomePage() {
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/85 p-4 backdrop-blur-sm" onClick={() => setReelOpen(false)}>
           <div className="relative w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
             <button type="button" onClick={() => setReelOpen(false)} className="absolute -top-9 right-0 text-sm text-white/70 transition-colors hover:text-white">
-              ✕ Tutup
+              ✕ Close
             </button>
             <div className="aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black shadow-2xl">
               <iframe src={toEmbed(showreelUrl)} className="h-full w-full" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen title="Showreel" />

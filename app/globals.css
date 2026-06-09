@@ -233,8 +233,8 @@ a, button { transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
   --border: rgba(255, 255, 255, 0.1);
   --input: rgba(255, 255, 255, 0.14);
   --ring: oklch(0.62 0.23 295);
-  --accent-1: #5b61e6;
-  --accent-2: #7fc0ea;
+  --accent-1: #5456f6;
+  --accent-2: #7fc4e0;
   color-scheme: dark;
 }
 
