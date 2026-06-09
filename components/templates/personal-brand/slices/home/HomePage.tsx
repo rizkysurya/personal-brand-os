@@ -540,25 +540,35 @@ export function HomePage() {
     <div className="studio-root relative isolate" style={{ "--accent-1": accent, "--accent-2": accent2 } as React.CSSProperties}>
       {/* ambient background */}
       <div aria-hidden className="absolute inset-0 -z-10 overflow-hidden">
+        {/* Ambient colour blobs */}
         <div className="studio-blob -left-40 -top-40 h-[42rem] w-[42rem]" style={{ background: "radial-gradient(circle, var(--accent-1), transparent 60%)" }} />
         <div className="studio-blob -right-32 top-32 h-[38rem] w-[38rem]" style={{ background: "radial-gradient(circle, var(--accent-2), transparent 60%)", animationDelay: "-6s" }} />
         <div className="studio-blob left-1/3 top-[58%] h-[34rem] w-[34rem]" style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--accent-1) 60%, #4f8ae0), transparent 60%)", animationDelay: "-11s", opacity: 0.3 }} />
-        {/* floating glossy gradient bubbles — idle drift + cursor parallax */}
+
+        {/* Glowing blue blueprint grid: blurred bloom → fine → major lines → pulsing centre hotspot, screen-blended + radially masked (brightest centre, fading to edges) */}
+        <div className="bp-grid">
+          <div className="bp-grid__bloom" />
+          <div className="bp-grid__fine" />
+          <div className="bp-grid__major" />
+          <div className="bp-grid__glow" />
+        </div>
+
+        {/* Slowly-drifting thin geometric accents — tasteful, low opacity */}
+        <div className="bp-accent bp-accent--ring bp-accent--drift-a left-[12%] top-[22%] h-[14rem] w-[14rem]" />
+        <div className="bp-accent bp-accent--ring bp-accent--spin right-[14%] top-[16%] h-[8rem] w-[8rem]" />
+        <div className="bp-accent bp-accent--ring bp-accent--drift-c right-[22%] bottom-[16%] h-[20rem] w-[20rem]" />
+        <div className="bp-accent bp-accent--plus bp-accent--drift-b left-[22%] bottom-[26%] h-10 w-10" />
+        <div className="bp-accent bp-accent--plus bp-accent--drift-c right-[30%] top-[30%] h-7 w-7" />
+        <div className="bp-accent bp-accent--dot bp-accent--drift-a right-[18%] top-[46%] h-2 w-2" />
+        <div className="bp-accent bp-accent--dot bp-accent--drift-b left-[30%] top-[40%] h-2.5 w-2.5" />
+        <div className="bp-accent bp-accent--dot bp-accent--drift-c left-[16%] bottom-[34%] h-2 w-2" />
+
+        {/* Cursor-parallax glossy bubbles (kept, on top) */}
         <SphereField />
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
-            WebkitMaskImage: "radial-gradient(ellipse 80% 55% at 50% 0%, #000 35%, transparent 100%)",
-            maskImage: "radial-gradient(ellipse 80% 55% at 50% 0%, #000 35%, transparent 100%)",
-          }}
-        />
       </div>
 
       {/* HERO — left-aligned, runlayer-style, with a liquid-glass showcase orb */}
-      <section className="hero-parallax relative mx-auto grid min-h-[82vh] max-w-6xl grid-cols-1 items-center gap-12 px-6 pb-16 pt-28 md:grid-cols-12 md:gap-8">
+      <section className="hero-parallax relative mx-auto grid min-h-[68vh] max-w-6xl grid-cols-1 items-center gap-12 px-6 pb-14 pt-20 md:grid-cols-12 md:gap-8">
         <div className="md:col-span-7">
           <span className="reveal inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-wide text-white/80 backdrop-blur-md" style={{ animationDelay: "0s" }}>
             <span className="pulse-dot inline-block size-1.5 rounded-full bg-emerald-400" />
@@ -575,11 +585,7 @@ export function HomePage() {
             <span className="text-gradient-animate">{C.heroHighlight}</span>
           </h2>
 
-          <p className="reveal mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg" style={{ animationDelay: "0.22s" }}>
-            {C.heroSubtext}
-          </p>
-
-          <div className="reveal mt-9 flex flex-wrap items-center gap-3" style={{ animationDelay: "0.28s" }}>
+          <div className="reveal mt-8 flex flex-wrap items-center gap-3" style={{ animationDelay: "0.22s" }}>
             <a href={C.heroPrimaryHref} className={GRADIENT_BTN}>
               {C.heroPrimaryLabel} <span className="transition-transform group-hover:translate-x-1">→</span>
             </a>
