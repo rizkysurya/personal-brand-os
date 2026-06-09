@@ -91,14 +91,132 @@ function useScrollReveal(deps: React.DependencyList) {
   }, deps);
 }
 
-const DEFAULT_ORDER = ["marquee", "about", "resume", "services", "work", "contact"];
-// CV-style portfolio: About + Experience + Services + Work + Contact on by
-// default. Marquee off. Owner re-toggles any from /admin (Tampilan Beranda).
+/** Fire `true` once the element scrolls into view (for triggering count-ups). */
+function useInView<T extends HTMLElement = HTMLDivElement>() {
+  const ref = React.useRef<T>(null);
+  const [inView, setInView] = React.useState(false);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return [ref, inView] as const;
+}
+
+/** Animated count-up that preserves a non-numeric prefix/suffix (e.g. "6+", "40%"). */
+function CountUp({ value, run }: { value: string; run: boolean }) {
+  const m = value.match(/^(\D*)(\d+)(.*)$/);
+  const target = m ? parseInt(m[2], 10) : 0;
+  const [n, setN] = React.useState(0);
+  React.useEffect(() => {
+    if (!run || !target) return;
+    let raf = 0;
+    let start = 0;
+    const dur = 1100;
+    const tick = (t: number) => {
+      if (!start) start = t;
+      const p = Math.min(1, (t - start) / dur);
+      setN(Math.round(target * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [run, target]);
+  if (!m) return <>{value}</>;
+  return <>{m[1]}{n}{m[3]}</>;
+}
+
+/** Big stat band with on-scroll count-up. */
+function StatsBand({ stats }: { stats: Array<{ value: string; label: string }> }) {
+  const [ref, inView] = useInView<HTMLDivElement>();
+  return (
+    <section className="relative mx-auto max-w-6xl px-6 py-12">
+      <div ref={ref} className="studio-reveal glass glow-border relative overflow-hidden rounded-3xl px-6 py-12 sm:px-10">
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 opacity-60" style={{ background: "radial-gradient(80% 130% at 50% 0%, color-mix(in oklab, var(--accent-1) 22%, transparent), transparent 70%)" }} />
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+          {stats.map((st, i) => (
+            <div key={i} className="text-center">
+              <div className="text-4xl font-bold leading-none sm:text-5xl md:text-6xl">
+                <span className="text-gradient"><CountUp value={st.value} run={inView} /></span>
+              </div>
+              <div className="mt-3 text-xs uppercase tracking-wider text-white/50 sm:text-sm">{st.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** Tab-switcher services panel (runlayer-style Build/Mix/Run). */
+function ServiceTabs({ services, eyebrow, title }: { services: SvcCard[]; eyebrow: string; title: string }) {
+  const [active, setActive] = React.useState(0);
+  const svc = services[active] ?? services[0];
+  if (!svc) return null;
+  return (
+    <section id="services" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
+      <div className="studio-reveal text-center">
+        <p className={EYEBROW}>{eyebrow}</p>
+        <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl md:text-5xl">{title}</h2>
+      </div>
+      <div className="studio-reveal mt-12 grid gap-6 md:grid-cols-12">
+        <div className="flex gap-3 overflow-x-auto pb-2 md:col-span-4 md:flex-col md:overflow-visible md:pb-0">
+          {services.map((s, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setActive(i)}
+              className={`group flex shrink-0 items-center gap-3 rounded-2xl border px-5 py-4 text-left transition-all ${
+                i === active
+                  ? "border-[color:var(--accent-1)] bg-white/[0.06]"
+                  : "border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
+              }`}
+            >
+              <span
+                className={`grid size-9 shrink-0 place-items-center rounded-xl text-xs font-bold ${i === active ? "text-white" : "text-white/45"}`}
+                style={i === active ? { background: "linear-gradient(135deg, var(--accent-1), var(--accent-2))" } : { background: "rgba(255,255,255,0.05)" }}
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span className={`whitespace-nowrap text-sm font-semibold ${i === active ? "text-white" : "text-white/60"}`}>{s.name}</span>
+            </button>
+          ))}
+        </div>
+        <div key={active} className="service-panel glass glow-border relative overflow-hidden rounded-3xl p-8 sm:p-10 md:col-span-8">
+          <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full opacity-30" style={{ background: "radial-gradient(circle, var(--accent-1), transparent 65%)" }} />
+          <h3 className="text-2xl font-bold text-white sm:text-3xl">{svc.name}</h3>
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-white/65 sm:text-lg">{svc.description}</p>
+          <ul className="mt-7 grid gap-3 sm:grid-cols-2">
+            {svc.bullets.map((b) => (
+              <li key={b} className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white/80">
+                <span className="text-[var(--accent-2)]">✦</span> {b}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const DEFAULT_ORDER = ["marquee", "stats", "about", "services", "resume", "work", "contact"];
+// Dynamic, runlayer-style flow. Owner re-toggles any from /admin (Tampilan Beranda).
 const DEFAULT_ENABLED: Record<string, boolean> = {
-  marquee: false,
+  marquee: true,
+  stats: true,
   about: true,
-  resume: true,
   services: true,
+  resume: true,
   work: true,
   contact: true,
 };
@@ -225,37 +343,34 @@ export function HomePage() {
 
   const renderers: Record<string, () => React.ReactNode> = {
     marquee: () => (
-      <section className="relative py-6">
-        <div className="marquee py-3">
+      <section className="relative overflow-hidden py-10">
+        <p className="mb-6 text-center text-xs font-semibold uppercase tracking-[0.25em] text-white/35">Tools &amp; software I work with</p>
+        <div className="marquee">
           <div className="marquee__track">
             {[...skills, ...skills].map((s, i) => (
-              <span key={i} className="glass-soft whitespace-nowrap rounded-full px-5 py-2 text-sm text-white/70">{s}</span>
+              <span key={i} className="glass-soft mx-2 whitespace-nowrap rounded-full px-5 py-2.5 text-sm text-white/70">{s}</span>
             ))}
           </div>
         </div>
       </section>
     ),
+    stats: () => <StatsBand stats={stats} />,
     about: () => (
       <section id="about" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
-        <div className="glass studio-reveal grid gap-10 rounded-3xl p-8 md:grid-cols-5 md:p-12">
-          <div className="md:col-span-3">
+        <div className="grid gap-10 md:grid-cols-12 md:items-center">
+          <div className="studio-reveal md:col-span-7">
             <p className={EYEBROW}>{C.aboutEyebrow}</p>
-            <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">{C.aboutTitle}</h2>
-            <p className="mt-5 max-w-xl whitespace-pre-line leading-relaxed text-white/65">{C.aboutBody}</p>
-            <div className="mt-7 flex flex-wrap gap-2">
-              {skills.slice(0, 10).map((s) => (
-                <span key={s} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white/70">{s}</span>
-              ))}
-            </div>
+            <h2 className="mt-3 text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">{C.aboutTitle}</h2>
+            <p className="mt-6 max-w-xl whitespace-pre-line text-base leading-relaxed text-white/65 sm:text-lg">{C.aboutBody}</p>
           </div>
-          <div className="md:col-span-2">
-            <div className="grid h-full grid-cols-2 gap-4">
-              {stats.map((st, i) => (
-                <div key={i} className="glass-soft flex flex-col justify-center rounded-2xl p-5">
-                  <div className="text-3xl font-bold text-white">{st.value}</div>
-                  <div className="mt-1 text-xs text-white/55">{st.label}</div>
-                </div>
-              ))}
+          <div className="studio-reveal md:col-span-5" style={{ transitionDelay: "80ms" }}>
+            <div className="glass rounded-3xl p-7 sm:p-8">
+              <div className="text-sm font-semibold uppercase tracking-wider text-[var(--accent-2)]">Toolbox</div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {skills.map((s) => (
+                  <span key={s} className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white/75 transition-colors hover:border-white/25 hover:text-white">{s}</span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -265,7 +380,7 @@ export function HomePage() {
       <section id="resume" className="relative mx-auto max-w-4xl scroll-mt-24 px-6 py-20">
         <div className="studio-reveal text-center">
           <p className={EYEBROW}>Career</p>
-          <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">Experience &amp; Skills</h2>
+          <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl md:text-5xl">Experience &amp; Skills</h2>
         </div>
         <div className="mt-12 space-y-6">
           <div className="studio-reveal glass rounded-3xl p-8 sm:p-10">
@@ -301,39 +416,13 @@ export function HomePage() {
         </div>
       </section>
     ),
-    services: () => (
-      <section id="services" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
-        <div className="studio-reveal text-center">
-          <p className={EYEBROW}>{C.servicesEyebrow}</p>
-          <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">{C.servicesTitle}</h2>
-        </div>
-        <div className="mt-10 flex flex-wrap justify-center gap-5">
-          {services.map((s, i) => (
-            <div
-              key={i}
-              className="studio-reveal glass glow-hover relative flex w-full flex-col rounded-2xl p-6 sm:w-80"
-              style={{ transitionDelay: `${i * 70}ms`, ...(s.featured ? { boxShadow: "inset 0 0 0 1px color-mix(in oklab, var(--accent-1) 45%, transparent)" } : {}) }}
-            >
-              <h3 className="text-lg font-semibold text-white">{s.name}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-white/60">{s.description}</p>
-              <ul className="mt-5 space-y-2">
-                {s.bullets.map((b) => (
-                  <li key={b} className="flex items-center gap-2 text-sm text-white/75">
-                    <span className="text-[var(--accent-1)]">✦</span> {b}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-    ),
+    services: () => <ServiceTabs services={services} eyebrow={C.servicesEyebrow} title={C.servicesTitle} />,
     work: () => (
       <section id="work" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
         <div className="studio-reveal flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className={EYEBROW}>{C.workEyebrow}</p>
-            <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">{C.workTitle}</h2>
+            <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl md:text-5xl">{C.workTitle}</h2>
           </div>
           <div className="flex flex-wrap gap-2">
             {CATEGORIES.map((c) => (
@@ -385,7 +474,7 @@ export function HomePage() {
     ),
     contact: () => (
       <section id="contact" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 pb-28 pt-10">
-        <div className="studio-reveal glass relative overflow-hidden rounded-3xl px-8 py-16 text-center sm:px-12">
+        <div className="studio-reveal glass glow-border relative overflow-hidden rounded-3xl px-8 py-16 text-center sm:px-12 sm:py-20">
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 opacity-70" style={{ background: "radial-gradient(60% 80% at 50% 0%, color-mix(in oklab, var(--accent-1) 35%, transparent), transparent 70%)" }} />
           <h2 className="mx-auto max-w-2xl text-3xl font-bold text-white sm:text-5xl">{C.contactTitle}</h2>
           <p className="mx-auto mt-4 max-w-md text-white/65">{C.contactSubtext}</p>
@@ -407,6 +496,12 @@ export function HomePage() {
         <div className="studio-blob -left-40 -top-40 h-[42rem] w-[42rem]" style={{ background: "radial-gradient(circle, var(--accent-1), transparent 60%)" }} />
         <div className="studio-blob -right-32 top-32 h-[38rem] w-[38rem]" style={{ background: "radial-gradient(circle, var(--accent-2), transparent 60%)", animationDelay: "-6s" }} />
         <div className="studio-blob left-1/3 top-[58%] h-[34rem] w-[34rem]" style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--accent-1) 60%, #4f8ae0), transparent 60%)", animationDelay: "-11s", opacity: 0.3 }} />
+        {/* floating glossy gradient spheres (show through the frosted glass) */}
+        <div className="sphere left-[6%] top-[15%] h-24 w-24" style={{ animationDelay: "-1s" }} />
+        <div className="sphere right-[9%] top-[9%] h-16 w-16" style={{ animationDelay: "-4s", opacity: 0.5 }} />
+        <div className="sphere left-[80%] top-[40%] h-28 w-28" style={{ animationDelay: "-7s" }} />
+        <div className="sphere left-[10%] top-[66%] h-20 w-20" style={{ animationDelay: "-3s", opacity: 0.45 }} />
+        <div className="sphere left-[68%] top-[83%] h-24 w-24" style={{ animationDelay: "-9s", opacity: 0.5 }} />
         <div
           className="absolute inset-0"
           style={{
@@ -420,7 +515,7 @@ export function HomePage() {
       </div>
 
       {/* HERO — minimalist, photo-less, portfolio-focused */}
-      <section className="hero-parallax relative mx-auto flex min-h-[80vh] max-w-5xl flex-col items-center justify-center px-6 pb-20 pt-24 text-center sm:pt-28">
+      <section className="hero-parallax relative mx-auto flex min-h-[82vh] max-w-5xl flex-col items-center justify-center px-6 pb-20 pt-24 text-center sm:pt-28">
         <span className="reveal inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-wide text-white/80 backdrop-blur-md" style={{ animationDelay: "0s" }}>
           <span className="pulse-dot inline-block size-1.5 rounded-full bg-emerald-400" />
           {C.heroEyebrow}
@@ -433,7 +528,7 @@ export function HomePage() {
           {name}
         </h1>
         <h2 className="reveal mt-2 text-3xl font-bold leading-[1.06] sm:text-5xl md:text-6xl" style={{ animationDelay: "0.16s" }}>
-          <span className="text-gradient">{C.heroHighlight}</span>
+          <span className="text-gradient-animate">{C.heroHighlight}</span>
         </h2>
 
         <p className="reveal mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg" style={{ animationDelay: "0.22s" }}>

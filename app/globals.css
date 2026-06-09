@@ -374,3 +374,59 @@ body:has(.theme-studio) {
   .work-card:hover .work-cover,
   .work-card:hover img { transform: scale(1.06); }
 }
+
+/* ---- Animated gradient text (hero highlight) ---- */
+.text-gradient-animate {
+  background: linear-gradient(100deg, var(--accent-1), var(--accent-2), var(--accent-1));
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .text-gradient-animate { animation: gradient-pan 6s linear infinite; }
+}
+@keyframes gradient-pan {
+  to { background-position: 220% center; }
+}
+
+/* ---- Service tab panel: fade + rise on switch ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .service-panel { animation: panel-in 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+}
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.99); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---- Liquid-glass gradient border (featured cards) ---- */
+.glow-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2) 55%, transparent 88%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ---- Floating glossy gradient spheres (show through the frosted glass) ---- */
+.sphere {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 30% 26%, color-mix(in oklab, var(--accent-2) 78%, white 38%), color-mix(in oklab, var(--accent-1) 88%, black 6%) 72%);
+  box-shadow: 0 44px 100px -28px color-mix(in oklab, var(--accent-1) 60%, transparent);
+  opacity: 0.6;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sphere { animation: sphere-float 10s ease-in-out infinite; }
+}
+@keyframes sphere-float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-30px) translateX(8px); }
+}
