@@ -43,11 +43,11 @@ const DEFAULT_STATS: Array<{ value: string; label: string }> = [
 ];
 
 const DEFAULT_EXPERIENCE = [
-  { period: "Nov 2025 – Present", role: "Motion Graphic Designer", place: "Tuntun Sekuritas Indonesia" },
-  { period: "Aug 2025 – Nov 2025", role: "Motion Graphic Designer (Project-Based)", place: "PT Teknologi Legal Bersama (Hukummu)" },
-  { period: "Feb 2021 – Aug 2025", role: "Graphic Designer & Animator", place: "Zeus Animation" },
-  { period: "Jul 2020 – Feb 2021", role: "Graphic Designer (Freelance)", place: "Freelance" },
-  { period: "Jul 2019 – Jul 2020", role: "Graphic Designer", place: "CV Mitra Utama Digital Printing" },
+  { period: "Nov 2025 – Present", role: "Motion Graphic Designer", place: "Tuntun Sekuritas Indonesia", description: "Creating educational motion graphics that simplify complex financial and investment topics into engaging, easy-to-understand visuals — managing production end to end, from research and storyboarding to final rendering." },
+  { period: "Aug 2025 – Nov 2025", role: "Motion Graphic Designer (Project-Based)", place: "PT Teknologi Legal Bersama (Hukummu)", description: "Produced instructional “How to Use” videos for a newly launched website — animating and editing from scripts, screen recordings, and references, with text animations and visual cues that improve user understanding." },
+  { period: "Feb 2021 – Aug 2025", role: "Graphic Designer & Animator", place: "Zeus Animation", description: "Core animator turning storyboards into 2D explainer videos, animated GIFs, and Lottie animations in Adobe Animate and After Effects, finished in Premiere Pro. Delivered 50+ projects and helped define the studio’s signature style." },
+  { period: "Jul 2020 – Feb 2021", role: "Graphic Designer (Freelance)", place: "Freelance", description: "Freelance print design for SME clients — banners, brochures, and flyers — supporting their branding and promotion with high-quality, print-ready results." },
+  { period: "Jul 2019 – Jul 2020", role: "Graphic Designer", place: "CV Mitra Utama Digital Printing", description: "Designed retail and promotional print materials, prepared production-ready files to printing specs, and ran pre-print quality control to cut errors." },
 ];
 
 const DEFAULT_SKILL_GROUPS = [
@@ -140,9 +140,20 @@ export function HomePage() {
   }, [portfolioRaw]);
 
   const services: SvcCard[] = React.useMemo(() => {
-    const rows = servicesRaw as unknown as Array<Record<string, unknown>>;
-    if (rows && rows.length > 0) {
-      return rows.slice(0, 4).map((s) => ({
+    const rows = (servicesRaw as unknown as Array<Record<string, unknown>>) ?? [];
+    // Ignore the template's seeded demo cards (Consulting / Design Sprint /
+    // Monthly Retainer) so the CV-matched defaults show until real services
+    // are added in /admin → Services.
+    const real = rows.filter((s) => {
+      const name = String(s.name ?? "").trim().toLowerCase();
+      const desc = String(s.description ?? "").trim().toLowerCase();
+      const isDemo =
+        desc.startsWith("demo service") ||
+        ["consulting", "design sprint", "monthly retainer"].includes(name);
+      return !isDemo;
+    });
+    if (real.length > 0) {
+      return real.slice(0, 4).map((s) => ({
         name: String(s.name ?? "Service"),
         description: String(s.description ?? ""),
         bullets: Array.isArray(s.bullets) ? (s.bullets as string[]).slice(0, 4) : [],
@@ -156,7 +167,8 @@ export function HomePage() {
   const skills = cfg?.skills && cfg.skills.length > 0 ? cfg.skills : DEFAULT_SKILLS;
   const stats = cfg?.stats && cfg.stats.length > 0 ? cfg.stats : DEFAULT_STATS;
   const skillGroups = DEFAULT_SKILL_GROUPS;
-  const experience = cfg?.experience && cfg.experience.length > 0 ? cfg.experience : DEFAULT_EXPERIENCE;
+  const experience: Array<{ role: string; period: string; place: string; description?: string }> =
+    cfg?.experience && cfg.experience.length > 0 ? cfg.experience : DEFAULT_EXPERIENCE;
 
   const [filter, setFilter] = React.useState<Category>("All");
   const [reelOpen, setReelOpen] = React.useState(false);
@@ -250,33 +262,38 @@ export function HomePage() {
       </section>
     ),
     resume: () => (
-      <section id="resume" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
+      <section id="resume" className="relative mx-auto max-w-4xl scroll-mt-24 px-6 py-20">
         <div className="studio-reveal text-center">
           <p className={EYEBROW}>Career</p>
           <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">Experience &amp; Skills</h2>
         </div>
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <div className="studio-reveal glass rounded-2xl p-7">
-            <h3 className="text-lg font-semibold text-white">Work Experience</h3>
-            <ul className="mt-5 space-y-5">
+        <div className="mt-12 space-y-6">
+          <div className="studio-reveal glass rounded-3xl p-8 sm:p-10">
+            <h3 className="text-xl font-semibold text-white sm:text-2xl">Work Experience</h3>
+            <ul className="mt-8 space-y-8">
               {experience.map((e, i) => (
-                <li key={i} className="relative border-l border-white/10 pl-5">
-                  <span className="absolute -left-[5px] top-1.5 size-2.5 rounded-full" style={{ background: "var(--accent-1)" }} />
-                  <div className="text-sm font-semibold text-white">{e.role}</div>
-                  <div className="text-sm text-white/60">{e.place}</div>
-                  <div className="mt-0.5 text-xs text-white/40">{e.period}</div>
+                <li key={i} className="relative border-l-2 border-white/10 pl-6">
+                  <span className="absolute -left-[7px] top-1.5 size-3.5 rounded-full ring-4 ring-black/30" style={{ background: "var(--accent-1)" }} />
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <h4 className="text-lg font-semibold text-white sm:text-xl">{e.role}</h4>
+                    <span className="text-sm text-white/45">{e.period}</span>
+                  </div>
+                  <div className="mt-0.5 text-base font-medium text-[var(--accent-2)]">{e.place}</div>
+                  {e.description ? (
+                    <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/65 sm:text-base">{e.description}</p>
+                  ) : null}
                 </li>
               ))}
             </ul>
           </div>
-          <div className="studio-reveal glass rounded-2xl p-7" style={{ transitionDelay: "80ms" }}>
-            <h3 className="text-lg font-semibold text-white">Technical Skills</h3>
-            <div className="mt-5 space-y-5">
+          <div className="studio-reveal glass rounded-3xl p-8 sm:p-10" style={{ transitionDelay: "80ms" }}>
+            <h3 className="text-xl font-semibold text-white sm:text-2xl">Technical Skills</h3>
+            <div className="mt-8 grid gap-7 sm:grid-cols-2">
               {skillGroups.map((g, i) => (
-                <div key={i} className="relative border-l border-white/10 pl-5">
-                  <span className="absolute -left-[5px] top-1.5 size-2.5 rounded-full" style={{ background: "var(--accent-2)" }} />
-                  <div className="text-xs font-semibold uppercase tracking-wider text-[var(--accent-2)]">{g.label}</div>
-                  <div className="mt-1 text-sm leading-relaxed text-white/70">{g.items}</div>
+                <div key={i} className="relative border-l-2 border-white/10 pl-6">
+                  <span className="absolute -left-[7px] top-1.5 size-3.5 rounded-full ring-4 ring-black/30" style={{ background: "var(--accent-2)" }} />
+                  <div className="text-sm font-semibold uppercase tracking-wider text-[var(--accent-2)]">{g.label}</div>
+                  <div className="mt-1.5 text-base leading-relaxed text-white/75">{g.items}</div>
                 </div>
               ))}
             </div>

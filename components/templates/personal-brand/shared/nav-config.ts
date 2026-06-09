@@ -42,9 +42,9 @@ export const WORKSPACE_BASE = paths.workspaceBase;
 export const ADMIN_BASE = ADMIN_PANEL_BASE;
 
 export const PUBLIC_NAV: NavItem[] = [
-  { label: "Tentang", href: "/#about" },
-  { label: "Karya", href: "/#work" },
-  { label: "Kontak", href: "/#contact" },
+  { label: "About", href: "/#about" },
+  { label: "Work", href: "/#work" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export const PUBLIC_CTA = { label: "Book a call", href: `${PUBLIC_BASE}/services` };
