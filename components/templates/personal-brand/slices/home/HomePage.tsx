@@ -208,6 +208,54 @@ function ServiceTabs({ services, eyebrow, title }: { services: SvcCard[]; eyebro
   );
 }
 
+/** Decorative gradient bubbles: gentle idle drift + cursor-parallax (desktop). */
+function SphereField() {
+  const ref = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const items = Array.from(root.querySelectorAll<HTMLElement>("[data-depth]"));
+    let tx = 0, ty = 0, cx = 0, cy = 0;
+    const onMove = (e: MouseEvent) => {
+      tx = (e.clientX / window.innerWidth - 0.5) * 2;
+      ty = (e.clientY / window.innerHeight - 0.5) * 2;
+    };
+    let raf = 0;
+    const tick = () => {
+      cx += (tx - cx) * 0.05;
+      cy += (ty - cy) * 0.05;
+      for (const el of items) {
+        const d = Number(el.dataset.depth) || 30;
+        el.style.transform = `translate3d(${(cx * d).toFixed(2)}px, ${(cy * d).toFixed(2)}px, 0)`;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+    raf = requestAnimationFrame(tick);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+  const S = [
+    { pos: "left-[6%] top-[15%]", size: "h-24 w-24", depth: 50, delay: "-1s", op: 0.8 },
+    { pos: "right-[9%] top-[9%]", size: "h-16 w-16", depth: 34, delay: "-4s", op: 0.55 },
+    { pos: "left-[80%] top-[40%]", size: "h-28 w-28", depth: 62, delay: "-7s", op: 0.8 },
+    { pos: "left-[10%] top-[66%]", size: "h-20 w-20", depth: 40, delay: "-3s", op: 0.5 },
+    { pos: "left-[68%] top-[83%]", size: "h-24 w-24", depth: 56, delay: "-9s", op: 0.55 },
+  ];
+  return (
+    <div ref={ref} aria-hidden className="pointer-events-none absolute inset-0">
+      {S.map((s, i) => (
+        <div key={i} data-depth={s.depth} className={`absolute ${s.pos} will-change-transform`}>
+          <div className={`sphere ${s.size}`} style={{ animationDelay: s.delay, opacity: s.op }} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 const DEFAULT_ORDER = ["marquee", "stats", "about", "services", "resume", "work", "contact"];
 // Dynamic, runlayer-style flow. Owner re-toggles any from /admin (Tampilan Beranda).
 const DEFAULT_ENABLED: Record<string, boolean> = {
@@ -495,12 +543,8 @@ export function HomePage() {
         <div className="studio-blob -left-40 -top-40 h-[42rem] w-[42rem]" style={{ background: "radial-gradient(circle, var(--accent-1), transparent 60%)" }} />
         <div className="studio-blob -right-32 top-32 h-[38rem] w-[38rem]" style={{ background: "radial-gradient(circle, var(--accent-2), transparent 60%)", animationDelay: "-6s" }} />
         <div className="studio-blob left-1/3 top-[58%] h-[34rem] w-[34rem]" style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--accent-1) 60%, #4f8ae0), transparent 60%)", animationDelay: "-11s", opacity: 0.3 }} />
-        {/* floating glossy gradient spheres (show through the frosted glass) */}
-        <div className="sphere left-[6%] top-[15%] h-24 w-24" style={{ animationDelay: "-1s" }} />
-        <div className="sphere right-[9%] top-[9%] h-16 w-16" style={{ animationDelay: "-4s", opacity: 0.5 }} />
-        <div className="sphere left-[80%] top-[40%] h-28 w-28" style={{ animationDelay: "-7s" }} />
-        <div className="sphere left-[10%] top-[66%] h-20 w-20" style={{ animationDelay: "-3s", opacity: 0.45 }} />
-        <div className="sphere left-[68%] top-[83%] h-24 w-24" style={{ animationDelay: "-9s", opacity: 0.5 }} />
+        {/* floating glossy gradient bubbles — idle drift + cursor parallax */}
+        <SphereField />
         <div
           className="absolute inset-0"
           style={{

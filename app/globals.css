@@ -412,8 +412,8 @@ body:has(.theme-studio) {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1.5px;
-  background: linear-gradient(135deg, var(--accent-1), var(--accent-2) 60%, transparent 92%);
+  padding: 3px;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2) 65%, color-mix(in oklab, var(--accent-2) 40%, transparent) 100%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
