@@ -74,6 +74,15 @@ function useScrollReveal(deps: React.DependencyList) {
 }
 
 const DEFAULT_ORDER = ["marquee", "work", "about", "services", "contact"];
+// Minimal-by-default: a clean CV + portfolio site (just work + contact show).
+// The owner re-enables any section from /admin (Tampilan Beranda → show/hide).
+const DEFAULT_ENABLED: Record<string, boolean> = {
+  marquee: false,
+  work: true,
+  about: false,
+  services: false,
+  contact: true,
+};
 
 /** Convert a YouTube/Vimeo watch URL into an autoplay embed URL. */
 function toEmbed(url: string): string {
@@ -176,7 +185,7 @@ export function HomePage() {
   const sectionCfg = cfg?.sections ?? [];
   const orderedSections = DEFAULT_ORDER.map((id, i) => {
     const f = sectionCfg.find((s) => s.id === id);
-    return { id, enabled: f ? f.enabled : true, order: f ? f.order : i + 1 };
+    return { id, enabled: f ? f.enabled : (DEFAULT_ENABLED[id] ?? true), order: f ? f.order : i + 1 };
   })
     .filter((s) => s.enabled)
     .sort((a, b) => a.order - b.order);
@@ -341,51 +350,37 @@ export function HomePage() {
         />
       </div>
 
-      {/* HERO — always first */}
-      <section className="hero-parallax relative mx-auto max-w-6xl px-6 pb-16 pt-20 sm:pt-28 md:pt-32">
+      {/* HERO — minimalist, photo-less, portfolio-focused (Anid-style) */}
+      <section className="hero-parallax relative mx-auto flex min-h-[80vh] max-w-5xl flex-col items-center justify-center px-6 pb-20 pt-24 text-center sm:pt-28">
         <span className="reveal inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-wide text-white/80 backdrop-blur-md" style={{ animationDelay: "0s" }}>
           <span className="pulse-dot inline-block size-1.5 rounded-full bg-emerald-400" />
           {C.heroEyebrow}
         </span>
 
-        <h1 className="reveal mt-6 max-w-4xl text-4xl font-bold leading-[1.05] text-white sm:text-6xl md:text-7xl" style={{ animationDelay: "0.06s" }}>
-          Halo, aku {name}. <span className="text-gradient">{C.heroHighlight}</span>
+        <p className="reveal mt-8 text-lg font-medium text-[var(--accent-1)] sm:text-xl" style={{ animationDelay: "0.05s" }}>
+          Halo, aku 👋
+        </p>
+        <h1 className="reveal mt-1 text-5xl font-bold leading-[1.02] text-white sm:text-7xl md:text-8xl" style={{ animationDelay: "0.1s" }}>
+          {name}
         </h1>
+        <h2 className="reveal mt-2 text-3xl font-bold leading-[1.06] sm:text-5xl md:text-6xl" style={{ animationDelay: "0.16s" }}>
+          <span className="text-gradient">{C.heroHighlight}</span>
+        </h2>
 
-        <p className="reveal mt-6 max-w-xl text-base leading-relaxed text-white/65 sm:text-lg" style={{ animationDelay: "0.12s" }}>
+        <p className="reveal mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg" style={{ animationDelay: "0.22s" }}>
           {C.heroSubtext}
         </p>
 
-        <div className="reveal mt-9 flex flex-wrap items-center gap-3" style={{ animationDelay: "0.18s" }}>
+        <div className="reveal mt-9 flex flex-wrap items-center justify-center gap-3" style={{ animationDelay: "0.28s" }}>
           <a href={C.heroPrimaryHref} className={GRADIENT_BTN}>
             {C.heroPrimaryLabel} <span className="transition-transform group-hover:translate-x-1">→</span>
           </a>
-          <a href={C.heroSecondaryHref} className={GLASS_BTN}>{C.heroSecondaryLabel}</a>
           {cvUrl ? (
             <a href={cvUrl} target="_blank" rel="noopener noreferrer" className={GLASS_BTN}>↓ Download CV</a>
           ) : null}
-        </div>
-
-        <div className="reveal mt-14" style={{ animationDelay: "0.24s" }}>
-          <div className="glass float-y mx-auto flex max-w-3xl items-center gap-5 rounded-2xl p-5 sm:p-6">
-            <button
-              type="button"
-              onClick={() => showreelUrl && setReelOpen(true)}
-              className="grid size-14 shrink-0 cursor-pointer place-items-center rounded-xl bg-linear-to-br from-[var(--accent-1)] to-[var(--accent-2)] text-white shadow-lg transition-transform hover:scale-105 sm:size-16"
-              aria-label="Putar showreel"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="size-6 sm:size-7"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-            <div className="min-w-0">
-              <div className="text-sm font-semibold text-white">{C.showreelTitle}</div>
-              <div className="mt-0.5 truncate text-xs text-white/55">{C.showreelSubtitle}</div>
-            </div>
-            <div className="ml-auto hidden items-end gap-1.5 sm:flex">
-              {[40, 70, 100, 60, 85, 50, 90].map((h, i) => (
-                <span key={i} className="w-1 rounded-full bg-linear-to-t from-[var(--accent-1)] to-[var(--accent-2)]" style={{ height: `${Math.round(h * 0.34)}px` }} />
-              ))}
-            </div>
-          </div>
+          {showreelUrl ? (
+            <button type="button" onClick={() => setReelOpen(true)} className={GLASS_BTN}>▶ Lihat Showreel</button>
+          ) : null}
         </div>
       </section>
 
