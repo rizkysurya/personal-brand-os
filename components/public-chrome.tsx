@@ -4,12 +4,10 @@ import { type ReactNode } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { SiteShell } from "@/components/templates/_shared/ui/site-shell";
-import { ThemePresetSwitcher } from "@/features/theme-presets";
 import { DEFAULT_SITE_CONFIG } from "@/components/templates/personal-brand/shared/site-config";
 import {
   FOOTER_COLUMNS,
   FOOTER_TAGLINE,
-  PUBLIC_CTA,
   PUBLIC_NAV,
 } from "@/components/templates/personal-brand/shared/nav-config";
 
@@ -33,8 +31,6 @@ export function PublicChrome({ children }: { children: ReactNode }) {
       brand={brand}
       homeHref="/"
       navItems={PUBLIC_NAV}
-      cta={PUBLIC_CTA}
-      navExtras={<ThemePresetSwitcher />}
       footerColumns={FOOTER_COLUMNS}
       footerTagline={tagline}
       copyrightHolder={brand.brandName}
