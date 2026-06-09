@@ -20,7 +20,11 @@ export function PublicChrome({ children }: { children: ReactNode }) {
     brandName,
     brandLetter: brandName.charAt(0).toUpperCase() || DEFAULT_SITE_CONFIG.brandLetter,
     description: "",
-    logoUrl: s?.logoUrl || "/logo.svg",
+    // Brand mark: always the bundled blue "A" (public/logo.svg). The owner
+    // asked for this exact logo, so we bypass any Settings upload to make sure
+    // it can never be accidentally overridden. (Flip back to
+    // `s?.logoUrl || "/logo.svg"` to re-enable dashboard logo uploads.)
+    logoUrl: "/logo.svg",
   };
 
   return (
