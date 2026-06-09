@@ -29,8 +29,7 @@ const DEFAULT_SKILLS = [
 type SvcCard = { name: string; description: string; bullets: string[]; priceLabel?: string; featured?: boolean };
 
 const PLACEHOLDER_SERVICES: SvcCard[] = [
-  { name: "Explainer Videos", description: "Clear, engaging explainer videos that turn complex topics into simple, memorable visual stories.", bullets: ["Script to screen", "2D animation & motion", "Sound design & delivery"], featured: true },
-  { name: "2D Animation", description: "Smooth, polished 2D character and motion animation, built around your brand.", bullets: ["Character animation", "Motion graphics", "Brand-consistent style"] },
+  { name: "Motion Graphics", description: "Explainer videos and 2D animation that turn complex topics into clear, compelling motion — from script and storyboard to polished, on-brand delivery.", bullets: ["Explainer videos", "2D character & motion animation", "Sound design & delivery"], featured: true },
   { name: "GIF & Lottie", description: "Lightweight animated assets — GIFs and Lottie files — for web, app, and social.", bullets: ["Lottie production", "Animated GIFs", "Optimized for web & app"] },
   { name: "Print Design", description: "Production-ready print design — banners, flyers, and promotional materials.", bullets: ["Banners & flyers", "Print-ready files", "Consistent branding"] },
 ];
@@ -145,7 +144,7 @@ function StatsBand({ stats }: { stats: Array<{ value: string; label: string }> }
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 opacity-60" style={{ background: "radial-gradient(80% 130% at 50% 0%, color-mix(in oklab, var(--accent-1) 22%, transparent), transparent 70%)" }} />
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {stats.map((st, i) => (
-            <div key={i} className="text-center">
+            <div key={i} className="text-left">
               <div className="text-4xl font-bold leading-none sm:text-5xl md:text-6xl">
                 <span className="text-gradient"><CountUp value={st.value} run={inView} /></span>
               </div>
@@ -165,7 +164,7 @@ function ServiceTabs({ services, eyebrow, title }: { services: SvcCard[]; eyebro
   if (!svc) return null;
   return (
     <section id="services" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
-      <div className="studio-reveal text-center">
+      <div className="studio-reveal">
         <p className={EYEBROW}>{eyebrow}</p>
         <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl md:text-5xl">{title}</h2>
       </div>
@@ -378,7 +377,7 @@ export function HomePage() {
     ),
     resume: () => (
       <section id="resume" className="relative mx-auto max-w-4xl scroll-mt-24 px-6 py-20">
-        <div className="studio-reveal text-center">
+        <div className="studio-reveal">
           <p className={EYEBROW}>Career</p>
           <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl md:text-5xl">Experience &amp; Skills</h2>
         </div>
@@ -474,11 +473,11 @@ export function HomePage() {
     ),
     contact: () => (
       <section id="contact" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 pb-28 pt-10">
-        <div className="studio-reveal glass glow-border relative overflow-hidden rounded-3xl px-8 py-16 text-center sm:px-12 sm:py-20">
-          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 opacity-70" style={{ background: "radial-gradient(60% 80% at 50% 0%, color-mix(in oklab, var(--accent-1) 35%, transparent), transparent 70%)" }} />
-          <h2 className="mx-auto max-w-2xl text-3xl font-bold text-white sm:text-5xl">{C.contactTitle}</h2>
-          <p className="mx-auto mt-4 max-w-md text-white/65">{C.contactSubtext}</p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <div className="studio-reveal glass glow-border relative overflow-hidden rounded-3xl px-8 py-16 sm:px-12 sm:py-20">
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 opacity-70" style={{ background: "radial-gradient(70% 90% at 0% 0%, color-mix(in oklab, var(--accent-1) 35%, transparent), transparent 70%)" }} />
+          <h2 className="max-w-2xl text-3xl font-bold text-white sm:text-5xl">{C.contactTitle}</h2>
+          <p className="mt-4 max-w-md text-white/65">{C.contactSubtext}</p>
+          <div className="mt-8 flex flex-wrap gap-3">
             <a href={contactHref} className={GRADIENT_BTN.replace("px-6", "px-7")}>{C.contactPrimaryLabel}</a>
             {cvUrl ? (
               <a href={cvUrl} target="_blank" rel="noopener noreferrer" className={GLASS_BTN.replace("px-6", "px-7")}>↓ Download CV</a>
@@ -514,37 +513,48 @@ export function HomePage() {
         />
       </div>
 
-      {/* HERO — minimalist, photo-less, portfolio-focused */}
-      <section className="hero-parallax relative mx-auto flex min-h-[82vh] max-w-5xl flex-col items-center justify-center px-6 pb-20 pt-24 text-center sm:pt-28">
-        <span className="reveal inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-wide text-white/80 backdrop-blur-md" style={{ animationDelay: "0s" }}>
-          <span className="pulse-dot inline-block size-1.5 rounded-full bg-emerald-400" />
-          {C.heroEyebrow}
-        </span>
+      {/* HERO — left-aligned, runlayer-style, with a liquid-glass showcase orb */}
+      <section className="hero-parallax relative mx-auto grid min-h-[82vh] max-w-6xl grid-cols-1 items-center gap-12 px-6 pb-16 pt-28 md:grid-cols-12 md:gap-8">
+        <div className="md:col-span-7">
+          <span className="reveal inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-wide text-white/80 backdrop-blur-md" style={{ animationDelay: "0s" }}>
+            <span className="pulse-dot inline-block size-1.5 rounded-full bg-emerald-400" />
+            {C.heroEyebrow}
+          </span>
 
-        <p className="reveal mt-8 text-lg font-medium text-[var(--accent-1)] sm:text-xl" style={{ animationDelay: "0.05s" }}>
-          Hi, I&apos;m 👋
-        </p>
-        <h1 className="reveal mt-1 text-5xl font-bold leading-[1.02] text-white sm:text-7xl md:text-8xl" style={{ animationDelay: "0.1s" }}>
-          {name}
-        </h1>
-        <h2 className="reveal mt-2 text-3xl font-bold leading-[1.06] sm:text-5xl md:text-6xl" style={{ animationDelay: "0.16s" }}>
-          <span className="text-gradient-animate">{C.heroHighlight}</span>
-        </h2>
+          <p className="reveal mt-8 text-lg font-medium text-[var(--accent-1)] sm:text-xl" style={{ animationDelay: "0.05s" }}>
+            Hi, I&apos;m 👋
+          </p>
+          <h1 className="reveal mt-1 text-5xl font-bold leading-[1.02] text-white sm:text-6xl md:text-7xl" style={{ animationDelay: "0.1s" }}>
+            {name}
+          </h1>
+          <h2 className="reveal mt-3 text-2xl font-bold leading-[1.15] sm:text-3xl" style={{ animationDelay: "0.16s" }}>
+            <span className="text-gradient-animate">{C.heroHighlight}</span>
+          </h2>
 
-        <p className="reveal mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg" style={{ animationDelay: "0.22s" }}>
-          {C.heroSubtext}
-        </p>
+          <p className="reveal mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg" style={{ animationDelay: "0.22s" }}>
+            {C.heroSubtext}
+          </p>
 
-        <div className="reveal mt-9 flex flex-wrap items-center justify-center gap-3" style={{ animationDelay: "0.28s" }}>
-          <a href={C.heroPrimaryHref} className={GRADIENT_BTN}>
-            {C.heroPrimaryLabel} <span className="transition-transform group-hover:translate-x-1">→</span>
-          </a>
-          {cvUrl ? (
-            <a href={cvUrl} target="_blank" rel="noopener noreferrer" className={GLASS_BTN}>↓ Download CV</a>
-          ) : null}
-          {showreelUrl ? (
-            <button type="button" onClick={() => setReelOpen(true)} className={GLASS_BTN}>▶ Watch Showreel</button>
-          ) : null}
+          <div className="reveal mt-9 flex flex-wrap items-center gap-3" style={{ animationDelay: "0.28s" }}>
+            <a href={C.heroPrimaryHref} className={GRADIENT_BTN}>
+              {C.heroPrimaryLabel} <span className="transition-transform group-hover:translate-x-1">→</span>
+            </a>
+            {cvUrl ? (
+              <a href={cvUrl} target="_blank" rel="noopener noreferrer" className={GLASS_BTN}>↓ Download CV</a>
+            ) : null}
+            {showreelUrl ? (
+              <button type="button" onClick={() => setReelOpen(true)} className={GLASS_BTN}>▶ Watch Showreel</button>
+            ) : null}
+          </div>
+        </div>
+
+        {/* right: liquid-glass showcase orb with the logo */}
+        <div className="reveal relative hidden md:col-span-5 md:block" style={{ animationDelay: "0.2s" }}>
+          <div className="glass glow-border float-y relative mx-auto grid aspect-square max-w-sm place-items-center rounded-[2.5rem]">
+            <div aria-hidden className="pointer-events-none absolute inset-0 rounded-[2.5rem]" style={{ background: "radial-gradient(60% 60% at 50% 42%, color-mix(in oklab, var(--accent-1) 38%, transparent), transparent 72%)" }} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.svg" alt={name} className="relative size-28 drop-shadow-[0_8px_30px_rgba(84,86,246,0.55)]" />
+          </div>
         </div>
       </section>
 
