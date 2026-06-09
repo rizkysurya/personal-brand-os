@@ -40,16 +40,14 @@ export function SiteNav({
             <img
               src={brand.logoUrl}
               alt={brand.brandName}
-              className="h-8 w-auto max-w-[170px] object-contain transition-transform duration-200 group-hover:scale-105"
+              className="h-8 w-auto max-w-[170px] object-contain transition-transform duration-200 group-hover:scale-110"
             />
           ) : (
-            <>
-              <span className="grid size-7 place-items-center rounded-md bg-foreground text-background transition-transform duration-200 group-hover:scale-110 group-hover:rotate-3">
-                {brand.brandLetter}
-              </span>
-              <span className="transition-colors group-hover:text-brand">{brand.brandName}</span>
-            </>
+            <span className="grid size-7 place-items-center rounded-md bg-foreground text-background transition-transform duration-200 group-hover:scale-110 group-hover:rotate-3">
+              {brand.brandLetter}
+            </span>
           )}
+          <span className="transition-colors group-hover:text-brand">{brand.brandName}</span>
         </Link>
         <nav className="hidden items-center gap-1 text-sm md:flex">
           {items.map((n) => {

@@ -166,8 +166,8 @@ export function HomePage() {
   const name = cfg?.heroName || ownerName;
   const email = settings?.contactEmail;
   const contactHref = email ? `mailto:${email}` : "/contact";
-  const accent = cfg?.accent || "#8b5cf6";
-  const accent2 = cfg?.accent2 || "#22d3ee";
+  const accent = cfg?.accent || "#5b61e6";
+  const accent2 = cfg?.accent2 || "#7fc0ea";
   const showreelUrl = cfg?.showreelUrl || "";
   const cvUrl = cfg?.cvUrl || "";
 

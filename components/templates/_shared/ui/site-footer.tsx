@@ -43,11 +43,9 @@ export function SiteFooter({
               // eslint-disable-next-line @next/next/no-img-element
               <img src={brand.logoUrl} alt={brand.brandName} className="h-8 w-auto max-w-[170px] object-contain" />
             ) : (
-              <>
-                <span className="grid size-7 place-items-center rounded-md bg-foreground text-background">{brand.brandLetter}</span>
-                <span>{brand.brandName}</span>
-              </>
+              <span className="grid size-7 place-items-center rounded-md bg-foreground text-background">{brand.brandLetter}</span>
             )}
+            <span>{brand.brandName}</span>
           </Link>
           {brand.description ? <p className="mt-3 max-w-sm text-sm text-muted-foreground">{brand.description}</p> : null}
           {belowBrand}
