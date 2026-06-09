@@ -256,11 +256,10 @@ function SphereField() {
   );
 }
 
-const DEFAULT_ORDER = ["marquee", "stats", "about", "services", "resume", "work", "contact"];
+const DEFAULT_ORDER = ["marquee", "about", "services", "resume", "work", "contact"];
 // Dynamic, runlayer-style flow. Owner re-toggles any from /admin (Tampilan Beranda).
 const DEFAULT_ENABLED: Record<string, boolean> = {
   marquee: true,
-  stats: true,
   about: true,
   services: true,
   resume: true,
