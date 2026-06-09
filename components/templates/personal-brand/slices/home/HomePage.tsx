@@ -548,21 +548,21 @@ export function HomePage() {
 
         {/* Large, heavily-blurred dark navy/indigo blobs that merge into one fluid cloud.
             Every colour is pre-mixed toward near-black + low opacity so they tint, never illuminate. */}
-        <div className="studio-blob -left-48 -top-44 h-[46rem] w-[46rem]" style={{ filter: "blur(120px) saturate(1.2)", opacity: 0.5, background: "radial-gradient(circle at 38% 34%, color-mix(in oklab, var(--accent-1) 78%, #0a1234), transparent 66%)" }} />
-        <div className="studio-blob -right-56 -top-32 h-[42rem] w-[42rem]" style={{ filter: "blur(130px) saturate(1.2)", opacity: 0.42, animationDelay: "-5s", background: "radial-gradient(circle at 60% 40%, color-mix(in oklab, #4f8ae0 74%, #0a1430), transparent 68%)" }} />
-        <div className="studio-blob left-[18%] top-[42%] h-[40rem] w-[40rem]" style={{ filter: "blur(140px) saturate(1.15)", opacity: 0.36, animationDelay: "-10s", background: "radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--accent-2) 62%, #0a1428), transparent 70%)" }} />
-        <div className="studio-blob -right-32 bottom-[-14%] h-[44rem] w-[44rem]" style={{ filter: "blur(125px) saturate(1.2)", opacity: 0.46, animationDelay: "-7s", background: "radial-gradient(circle at 44% 46%, color-mix(in oklab, var(--accent-1) 74%, #0a1030), transparent 67%)" }} />
-        <div className="studio-blob left-[-10%] bottom-[-18%] h-[38rem] w-[38rem]" style={{ filter: "blur(140px) saturate(1.15)", opacity: 0.34, animationDelay: "-13s", background: "radial-gradient(circle at 56% 50%, color-mix(in oklab, #4f8ae0 60%, #0a1228), transparent 69%)" }} />
+        <div className="studio-blob -left-48 -top-44 h-[46rem] w-[46rem]" style={{ filter: "blur(95px) saturate(1.3)", opacity: 0.8, background: "radial-gradient(circle at 38% 34%, color-mix(in oklab, var(--accent-1) 90%, #11183c), transparent 64%)" }} />
+        <div className="studio-blob -right-56 -top-32 h-[42rem] w-[42rem]" style={{ filter: "blur(105px) saturate(1.3)", opacity: 0.7, animationDelay: "-5s", background: "radial-gradient(circle at 60% 40%, color-mix(in oklab, #4f8ae0 86%, #111a3a), transparent 66%)" }} />
+        <div className="studio-blob left-[18%] top-[42%] h-[40rem] w-[40rem]" style={{ filter: "blur(115px) saturate(1.25)", opacity: 0.6, animationDelay: "-10s", background: "radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--accent-2) 76%, #111a3c), transparent 68%)" }} />
+        <div className="studio-blob -right-32 bottom-[-14%] h-[44rem] w-[44rem]" style={{ filter: "blur(100px) saturate(1.3)", opacity: 0.74, animationDelay: "-7s", background: "radial-gradient(circle at 44% 46%, color-mix(in oklab, var(--accent-1) 86%, #0f1638), transparent 65%)" }} />
+        <div className="studio-blob left-[-10%] bottom-[-18%] h-[38rem] w-[38rem]" style={{ filter: "blur(115px) saturate(1.25)", opacity: 0.58, animationDelay: "-13s", background: "radial-gradient(circle at 56% 50%, color-mix(in oklab, #4f8ae0 74%, #111838), transparent 67%)" }} />
 
         {/* Veil — fuses the blobs into one continuous organic cloud (no hard edges) */}
-        <div className="studio-veil" style={{ background: "radial-gradient(58% 50% at 30% 22%, color-mix(in oklab, var(--accent-1) 22%, transparent), transparent 70%), radial-gradient(54% 48% at 74% 64%, color-mix(in oklab, var(--accent-2) 16%, transparent), transparent 72%), radial-gradient(60% 55% at 50% 100%, color-mix(in oklab, #4f8ae0 14%, transparent), transparent 70%)" }} />
+        <div className="studio-veil" style={{ opacity: 0.72, background: "radial-gradient(58% 50% at 30% 22%, color-mix(in oklab, var(--accent-1) 34%, transparent), transparent 70%), radial-gradient(54% 48% at 74% 64%, color-mix(in oklab, var(--accent-2) 26%, transparent), transparent 72%), radial-gradient(60% 55% at 50% 100%, color-mix(in oklab, #4f8ae0 24%, transparent), transparent 70%)" }} />
 
         {/* Two thin, dim ring outlines (reference accent) */}
         <div className="studio-ring left-[8%] top-[14%] h-[20rem] w-[20rem]" />
         <div className="studio-ring right-[10%] bottom-[16%] h-[28rem] w-[28rem]" />
 
         {/* Readability guard — darkens the heading zone + a faint full-field vignette so white text stays clear regardless of blob drift */}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(5,6,12,0.32) 0%, rgba(5,6,12,0.06) 26%, transparent 48%), radial-gradient(125% 95% at 50% 26%, transparent 60%, rgba(5,6,12,0.22) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(5,6,12,0.28) 0%, rgba(5,6,12,0.05) 24%, transparent 46%), radial-gradient(125% 95% at 50% 26%, transparent 64%, rgba(5,6,12,0.12) 100%)" }} />
 
         {/* Floating glossy spheres — kept (cursor-parallax) */}
         <SphereField />
