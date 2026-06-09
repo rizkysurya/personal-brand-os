@@ -151,6 +151,8 @@ export default defineSchema({
     heroSecondaryHref: v.optional(v.string()),
     showreelTitle: v.optional(v.string()),
     showreelSubtitle: v.optional(v.string()),
+    showreelUrl: v.optional(v.string()),
+    cvUrl: v.optional(v.string()),
     workEyebrow: v.optional(v.string()),
     workTitle: v.optional(v.string()),
     aboutEyebrow: v.optional(v.string()),

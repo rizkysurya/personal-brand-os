@@ -27,7 +27,7 @@ type Sec = { id: string; enabled: boolean; order: number };
 const TEXT_KEYS = [
   "heroEyebrow", "heroName", "heroHighlight", "heroSubtext",
   "heroPrimaryLabel", "heroPrimaryHref", "heroSecondaryLabel", "heroSecondaryHref",
-  "showreelTitle", "showreelSubtitle",
+  "showreelTitle", "showreelSubtitle", "showreelUrl", "cvUrl",
   "workEyebrow", "workTitle", "aboutEyebrow", "aboutTitle", "aboutBody",
   "servicesEyebrow", "servicesTitle", "contactTitle", "contactSubtext", "contactPrimaryLabel",
 ];
@@ -93,6 +93,8 @@ export default function AppearancePage() {
         heroSecondaryHref: form.heroSecondaryHref,
         showreelTitle: form.showreelTitle,
         showreelSubtitle: form.showreelSubtitle,
+        showreelUrl: form.showreelUrl,
+        cvUrl: form.cvUrl,
         workEyebrow: form.workEyebrow,
         workTitle: form.workTitle,
         aboutEyebrow: form.aboutEyebrow,
@@ -150,6 +152,8 @@ export default function AppearancePage() {
             <FieldText label="Tombol 2 — link" k="heroSecondaryHref" form={form} set={set} ph="/contact" />
             <FieldText label="Showreel — judul" k="showreelTitle" form={form} set={set} ph="Showreel 2026" />
             <FieldText label="Showreel — sub" k="showreelSubtitle" form={form} set={set} ph="Kompilasi terbaik — 90 detik" />
+            <FieldText label="Showreel — link video (YouTube/Vimeo)" k="showreelUrl" form={form} set={set} ph="https://youtu.be/..." full />
+            <FieldText label="Link CV / Resume (PDF)" k="cvUrl" form={form} set={set} ph="https://drive.google.com/..." full />
           </div>
         </CardContent>
       </Card>

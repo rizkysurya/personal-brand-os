@@ -75,6 +75,16 @@ function useScrollReveal(deps: React.DependencyList) {
 
 const DEFAULT_ORDER = ["marquee", "work", "about", "services", "contact"];
 
+/** Convert a YouTube/Vimeo watch URL into an autoplay embed URL. */
+function toEmbed(url: string): string {
+  if (!url) return "";
+  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
+  if (yt) return `https://www.youtube.com/embed/${yt[1]}?autoplay=1&rel=0`;
+  const vm = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vm) return `https://player.vimeo.com/video/${vm[1]}?autoplay=1`;
+  return url;
+}
+
 export function HomePage() {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
@@ -119,6 +129,7 @@ export function HomePage() {
   const stats = cfg?.stats && cfg.stats.length > 0 ? cfg.stats : DEFAULT_STATS;
 
   const [filter, setFilter] = React.useState<Category>("Semua");
+  const [reelOpen, setReelOpen] = React.useState(false);
   const filteredWork =
     filter === "Semua" ? work : work.filter((w) => w.category.toLowerCase().includes(filter.toLowerCase()));
 
@@ -132,6 +143,8 @@ export function HomePage() {
   const contactHref = email ? `mailto:${email}` : "/contact";
   const accent = cfg?.accent || "#8b5cf6";
   const accent2 = cfg?.accent2 || "#22d3ee";
+  const showreelUrl = cfg?.showreelUrl || "";
+  const cvUrl = cfg?.cvUrl || "";
 
   const C = {
     heroEyebrow: cfg?.heroEyebrow || "Tersedia untuk proyek freelance",
@@ -348,13 +361,21 @@ export function HomePage() {
             {C.heroPrimaryLabel} <span className="transition-transform group-hover:translate-x-1">→</span>
           </a>
           <a href={C.heroSecondaryHref} className={GLASS_BTN}>{C.heroSecondaryLabel}</a>
+          {cvUrl ? (
+            <a href={cvUrl} target="_blank" rel="noopener noreferrer" className={GLASS_BTN}>↓ Download CV</a>
+          ) : null}
         </div>
 
         <div className="reveal mt-14" style={{ animationDelay: "0.24s" }}>
           <div className="glass float-y mx-auto flex max-w-3xl items-center gap-5 rounded-2xl p-5 sm:p-6">
-            <div className="grid size-14 shrink-0 place-items-center rounded-xl bg-linear-to-br from-[var(--accent-1)] to-[var(--accent-2)] text-white shadow-lg sm:size-16">
+            <button
+              type="button"
+              onClick={() => showreelUrl && setReelOpen(true)}
+              className="grid size-14 shrink-0 cursor-pointer place-items-center rounded-xl bg-linear-to-br from-[var(--accent-1)] to-[var(--accent-2)] text-white shadow-lg transition-transform hover:scale-105 sm:size-16"
+              aria-label="Putar showreel"
+            >
               <svg viewBox="0 0 24 24" fill="currentColor" className="size-6 sm:size-7"><path d="M8 5v14l11-7z" /></svg>
-            </div>
+            </button>
             <div className="min-w-0">
               <div className="text-sm font-semibold text-white">{C.showreelTitle}</div>
               <div className="mt-0.5 truncate text-xs text-white/55">{C.showreelSubtitle}</div>
@@ -372,6 +393,19 @@ export function HomePage() {
       {orderedSections.map((s) => (
         <React.Fragment key={s.id}>{renderers[s.id]?.()}</React.Fragment>
       ))}
+
+      {reelOpen && showreelUrl ? (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/85 p-4 backdrop-blur-sm" onClick={() => setReelOpen(false)}>
+          <div className="relative w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
+            <button type="button" onClick={() => setReelOpen(false)} className="absolute -top-9 right-0 text-sm text-white/70 transition-colors hover:text-white">
+              ✕ Tutup
+            </button>
+            <div className="aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black shadow-2xl">
+              <iframe src={toEmbed(showreelUrl)} className="h-full w-full" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen title="Showreel" />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
