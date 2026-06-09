@@ -139,7 +139,7 @@ function CountUp({ value, run }: { value: string; run: boolean }) {
 function StatsBand({ stats }: { stats: Array<{ value: string; label: string }> }) {
   const [ref, inView] = useInView<HTMLDivElement>();
   return (
-    <section className="relative mx-auto max-w-6xl px-6 py-12">
+    <section className="relative mx-auto max-w-[90rem] px-6 py-12">
       <div ref={ref} className="studio-reveal glass glow-border relative overflow-hidden rounded-3xl px-6 py-12 sm:px-10">
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 opacity-60" style={{ background: "radial-gradient(80% 130% at 50% 0%, color-mix(in oklab, var(--accent-1) 22%, transparent), transparent 70%)" }} />
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
@@ -163,7 +163,7 @@ function ServiceTabs({ services, eyebrow, title }: { services: SvcCard[]; eyebro
   const svc = services[active] ?? services[0];
   if (!svc) return null;
   return (
-    <section id="services" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
+    <section id="services" className="relative mx-auto max-w-[90rem] scroll-mt-24 px-6 py-20">
       <div className="studio-reveal">
         <p className={EYEBROW}>{eyebrow}</p>
         <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl md:text-5xl">{title}</h2>
@@ -406,7 +406,7 @@ export function HomePage() {
     ),
     stats: () => <StatsBand stats={stats} />,
     about: () => (
-      <section id="about" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
+      <section id="about" className="relative mx-auto max-w-[90rem] scroll-mt-24 px-6 py-20">
         <div className="grid gap-10 md:grid-cols-12 md:items-center">
           <div className="studio-reveal md:col-span-7">
             <p className={EYEBROW}>{C.aboutEyebrow}</p>
@@ -468,7 +468,7 @@ export function HomePage() {
     ),
     services: () => <ServiceTabs services={services} eyebrow={C.servicesEyebrow} title={C.servicesTitle} />,
     work: () => (
-      <section id="work" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20">
+      <section id="work" className="relative mx-auto max-w-[90rem] scroll-mt-24 px-6 py-20">
         <div className="studio-reveal flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className={EYEBROW}>{C.workEyebrow}</p>
@@ -523,7 +523,7 @@ export function HomePage() {
       </section>
     ),
     contact: () => (
-      <section id="contact" className="relative mx-auto max-w-6xl scroll-mt-24 px-6 pb-28 pt-10">
+      <section id="contact" className="relative mx-auto max-w-[90rem] scroll-mt-24 px-6 pb-28 pt-10">
         <div className="studio-reveal glass glow-border relative overflow-hidden rounded-3xl px-8 py-16 sm:px-12 sm:py-20">
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 opacity-70" style={{ background: "radial-gradient(70% 90% at 0% 0%, color-mix(in oklab, var(--accent-1) 35%, transparent), transparent 70%)" }} />
           <h2 className="max-w-2xl text-3xl font-bold text-white sm:text-5xl">{C.contactTitle}</h2>
@@ -548,11 +548,11 @@ export function HomePage() {
 
         {/* Large, heavily-blurred dark navy/indigo blobs that merge into one fluid cloud.
             Every colour is pre-mixed toward near-black + low opacity so they tint, never illuminate. */}
-        <div className="studio-blob -left-48 -top-44 h-[46rem] w-[46rem]" style={{ filter: "blur(130px) saturate(1.05)", opacity: 0.32, background: "radial-gradient(circle at 38% 34%, color-mix(in oklab, var(--accent-1) 60%, #05060f), transparent 64%)" }} />
-        <div className="studio-blob -right-56 -top-32 h-[42rem] w-[42rem]" style={{ filter: "blur(140px) saturate(1.05)", opacity: 0.24, animationDelay: "-5s", background: "radial-gradient(circle at 60% 40%, color-mix(in oklab, #4f8ae0 52%, #06070f), transparent 66%)" }} />
-        <div className="studio-blob left-[18%] top-[42%] h-[40rem] w-[40rem]" style={{ filter: "blur(150px) saturate(1.0)", opacity: 0.2, animationDelay: "-10s", background: "radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--accent-2) 40%, #05060d), transparent 68%)" }} />
-        <div className="studio-blob -right-32 bottom-[-14%] h-[44rem] w-[44rem]" style={{ filter: "blur(135px) saturate(1.05)", opacity: 0.26, animationDelay: "-7s", background: "radial-gradient(circle at 44% 46%, color-mix(in oklab, var(--accent-1) 50%, #05050c), transparent 65%)" }} />
-        <div className="studio-blob left-[-10%] bottom-[-18%] h-[38rem] w-[38rem]" style={{ filter: "blur(150px) saturate(1.0)", opacity: 0.18, animationDelay: "-13s", background: "radial-gradient(circle at 56% 50%, color-mix(in oklab, #4f8ae0 42%, #05060e), transparent 67%)" }} />
+        <div className="studio-blob -left-48 -top-44 h-[46rem] w-[46rem]" style={{ filter: "blur(120px) saturate(1.2)", opacity: 0.5, background: "radial-gradient(circle at 38% 34%, color-mix(in oklab, var(--accent-1) 78%, #0a1234), transparent 66%)" }} />
+        <div className="studio-blob -right-56 -top-32 h-[42rem] w-[42rem]" style={{ filter: "blur(130px) saturate(1.2)", opacity: 0.42, animationDelay: "-5s", background: "radial-gradient(circle at 60% 40%, color-mix(in oklab, #4f8ae0 74%, #0a1430), transparent 68%)" }} />
+        <div className="studio-blob left-[18%] top-[42%] h-[40rem] w-[40rem]" style={{ filter: "blur(140px) saturate(1.15)", opacity: 0.36, animationDelay: "-10s", background: "radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--accent-2) 62%, #0a1428), transparent 70%)" }} />
+        <div className="studio-blob -right-32 bottom-[-14%] h-[44rem] w-[44rem]" style={{ filter: "blur(125px) saturate(1.2)", opacity: 0.46, animationDelay: "-7s", background: "radial-gradient(circle at 44% 46%, color-mix(in oklab, var(--accent-1) 74%, #0a1030), transparent 67%)" }} />
+        <div className="studio-blob left-[-10%] bottom-[-18%] h-[38rem] w-[38rem]" style={{ filter: "blur(140px) saturate(1.15)", opacity: 0.34, animationDelay: "-13s", background: "radial-gradient(circle at 56% 50%, color-mix(in oklab, #4f8ae0 60%, #0a1228), transparent 69%)" }} />
 
         {/* Veil — fuses the blobs into one continuous organic cloud (no hard edges) */}
         <div className="studio-veil" style={{ background: "radial-gradient(58% 50% at 30% 22%, color-mix(in oklab, var(--accent-1) 22%, transparent), transparent 70%), radial-gradient(54% 48% at 74% 64%, color-mix(in oklab, var(--accent-2) 16%, transparent), transparent 72%), radial-gradient(60% 55% at 50% 100%, color-mix(in oklab, #4f8ae0 14%, transparent), transparent 70%)" }} />
@@ -562,14 +562,14 @@ export function HomePage() {
         <div className="studio-ring right-[10%] bottom-[16%] h-[28rem] w-[28rem]" />
 
         {/* Readability guard — darkens the heading zone + a faint full-field vignette so white text stays clear regardless of blob drift */}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(5,5,9,0.5) 0%, rgba(5,5,9,0.12) 30%, transparent 55%), radial-gradient(120% 90% at 50% 30%, transparent 55%, rgba(5,5,9,0.28) 100%), radial-gradient(60% 38% at 50% 104%, color-mix(in oklab, var(--accent-2) 9%, transparent), transparent 72%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(5,6,12,0.32) 0%, rgba(5,6,12,0.06) 26%, transparent 48%), radial-gradient(125% 95% at 50% 26%, transparent 60%, rgba(5,6,12,0.22) 100%)" }} />
 
         {/* Floating glossy spheres — kept (cursor-parallax) */}
         <SphereField />
       </div>
 
       {/* HERO — left-aligned, runlayer-style, with a liquid-glass showcase orb */}
-      <section className="hero-parallax relative mx-auto grid min-h-[68vh] max-w-6xl grid-cols-1 items-center gap-12 px-6 pb-14 pt-20 md:grid-cols-12 md:gap-8">
+      <section className="hero-parallax relative mx-auto grid min-h-[68vh] max-w-[90rem] grid-cols-1 items-center gap-12 px-6 pb-14 pt-20 md:grid-cols-12 md:gap-8">
         <div className="md:col-span-7">
           <span className="reveal inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-wide text-white/80 backdrop-blur-md" style={{ animationDelay: "0s" }}>
             <span className="pulse-dot inline-block size-1.5 rounded-full bg-emerald-400" />

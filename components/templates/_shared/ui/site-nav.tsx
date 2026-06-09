@@ -33,7 +33,7 @@ export function SiteNav({
   const [open, setOpen] = React.useState(false);
   return (
     <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3">
+      <div className="mx-auto flex max-w-[90rem] items-center justify-between gap-4 px-6 py-3">
         <Link href={homeHref} className="group flex items-center gap-2 font-semibold tracking-tight">
           {brand.logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -49,26 +49,26 @@ export function SiteNav({
           )}
           <span className="transition-colors group-hover:text-brand">{brand.brandName}</span>
         </Link>
-        <nav className="hidden items-center gap-1 text-sm md:flex">
-          {items.map((n) => {
-            const on = pathname === n.href || pathname.startsWith(n.href + "/");
-            return (
-              <Link
-                key={n.href}
-                href={n.href}
-                className={cn(
-                  "rounded-md px-3 py-1.5 font-medium transition-colors",
-                  on
-                    ? "bg-brand/10 text-brand"
-                    : "text-muted-foreground hover:bg-accent hover:text-foreground",
-                )}
-              >
-                {n.label}
-              </Link>
-            );
-          })}
-        </nav>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-4 md:gap-6">
+          <nav className="hidden items-center gap-1 text-sm md:flex">
+            {items.map((n) => {
+              const on = pathname === n.href || pathname.startsWith(n.href + "/");
+              return (
+                <Link
+                  key={n.href}
+                  href={n.href}
+                  className={cn(
+                    "rounded-md px-3 py-1.5 font-medium transition-colors",
+                    on
+                      ? "bg-brand/10 text-brand"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground",
+                  )}
+                >
+                  {n.label}
+                </Link>
+              );
+            })}
+          </nav>
           {extras}
           {cta && (
             <Button asChild size="sm">
@@ -90,7 +90,7 @@ export function SiteNav({
       </div>
       {open && (
         <div className="border-t border-border/60 bg-background md:hidden">
-          <nav className="mx-auto flex max-w-6xl flex-col px-6 py-2">
+          <nav className="mx-auto flex max-w-[90rem] flex-col px-6 py-2">
             {items.map((n) => {
               const on = pathname === n.href || pathname.startsWith(n.href + "/");
               return (

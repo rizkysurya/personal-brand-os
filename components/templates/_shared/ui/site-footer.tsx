@@ -36,7 +36,7 @@ export function SiteFooter({
 }) {
   return (
     <footer className="border-t border-border/60 bg-background">
-      <div className={`mx-auto grid max-w-6xl gap-8 px-6 py-12 md:grid-cols-${Math.min(4, columns.length + 2)}`}>
+      <div className={`mx-auto grid max-w-[90rem] gap-8 px-6 py-12 md:grid-cols-${Math.min(4, columns.length + 2)}`}>
         <div className="md:col-span-2">
           <Link href={homeHref} className="flex items-center gap-2 font-semibold">
             {brand.logoUrl ? (
@@ -79,7 +79,7 @@ export function SiteFooter({
         ))}
       </div>
       <Separator />
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-6 py-5 text-xs text-muted-foreground">
+      <div className="mx-auto flex max-w-[90rem] flex-wrap items-center justify-between gap-2 px-6 py-5 text-xs text-muted-foreground">
         <p>© {new Date().getFullYear()} {copyrightHolder ?? brand.brandName}. All rights reserved.</p>
         {tagline && (
           <p className="inline-flex items-center gap-1">
