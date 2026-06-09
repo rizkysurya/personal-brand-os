@@ -453,12 +453,11 @@ body:has(.theme-studio) {
   inset: -10%;
   pointer-events: none;
   mix-blend-mode: screen;
-  /* Dimmed so it stays legible behind text/cards. */
+  /* Radial circle: full at the centre, fading to 0 at the outer edge, so the
+     grid reads as ~40% (the .bp-grid opacity) in the middle and 0% at the rim. */
   opacity: 0.4;
-  /* Visible across the whole page with a gentle vignette; the pulsing
-     hotspot (.bp-grid__glow) supplies the brighter-centre glow. */
-  -webkit-mask-image: radial-gradient(ellipse 100% 75% at 50% 32%, #000 0%, #000 45%, rgba(0,0,0,0.55) 72%, rgba(0,0,0,0.18) 100%);
-  mask-image: radial-gradient(ellipse 100% 75% at 50% 32%, #000 0%, #000 45%, rgba(0,0,0,0.55) 72%, rgba(0,0,0,0.18) 100%);
+  -webkit-mask-image: radial-gradient(circle at 50% 34%, #000 0%, #000 6%, transparent 50%);
+  mask-image: radial-gradient(circle at 50% 34%, #000 0%, #000 6%, transparent 50%);
 }
 .bp-grid__bloom {
   position: absolute;
@@ -494,7 +493,7 @@ body:has(.theme-studio) {
   transform: translate3d(-50%, -50%, 0);
   border-radius: 9999px;
   background: radial-gradient(circle, color-mix(in oklab, var(--accent-1) 55%, #4f8ae0) 0%, color-mix(in oklab, var(--accent-2) 40%, transparent) 26%, transparent 60%);
-  opacity: 0.42;
+  opacity: 0.24;
   will-change: transform, opacity;
 }
 .bp-accent {
@@ -530,8 +529,8 @@ body:has(.theme-studio) {
   .bp-accent--spin    { animation: bp-spin 52s linear infinite; }
 }
 @keyframes bp-glow-pulse {
-  0%, 100% { opacity: 0.34; transform: translate3d(-50%, -50%, 0) scale(0.94); }
-  50%      { opacity: 0.5;  transform: translate3d(-50%, -50%, 0) scale(1.06); }
+  0%, 100% { opacity: 0.18; transform: translate3d(-50%, -50%, 0) scale(0.94); }
+  50%      { opacity: 0.28; transform: translate3d(-50%, -50%, 0) scale(1.06); }
 }
 @keyframes bp-drift {
   0%, 100% { transform: translate3d(0, 0, 0); }

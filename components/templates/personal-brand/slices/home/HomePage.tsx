@@ -244,6 +244,10 @@ function SphereField() {
     { pos: "left-[80%] top-[40%]", size: "h-28 w-28", depth: 62, delay: "-7s", op: 0.8 },
     { pos: "left-[10%] top-[66%]", size: "h-20 w-20", depth: 40, delay: "-3s", op: 0.5 },
     { pos: "left-[68%] top-[83%]", size: "h-24 w-24", depth: 56, delay: "-9s", op: 0.55 },
+    { pos: "left-[42%] top-[26%]", size: "h-14 w-14", depth: 30, delay: "-2s", op: 0.5 },
+    { pos: "right-[22%] top-[56%]", size: "h-20 w-20", depth: 46, delay: "-6s", op: 0.6 },
+    { pos: "left-[26%] top-[90%]", size: "h-16 w-16", depth: 38, delay: "-5s", op: 0.5 },
+    { pos: "right-[36%] top-[74%]", size: "h-12 w-12", depth: 28, delay: "-8s", op: 0.45 },
   ];
   return (
     <div ref={ref} aria-hidden className="pointer-events-none absolute inset-0">
@@ -539,6 +543,9 @@ export function HomePage() {
     <div className="studio-root relative isolate" style={{ "--accent-1": accent, "--accent-2": accent2 } as React.CSSProperties}>
       {/* ambient background */}
       <div aria-hidden className="absolute inset-0 -z-10 overflow-hidden">
+        {/* Dark gradient base + thin liquid-glass sheen */}
+        <div className="absolute inset-0" style={{ background: "radial-gradient(135% 95% at 50% -15%, #10162e 0%, #0a0c1c 36%, #070810 68%, #050509 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.045) 0%, transparent 16%), radial-gradient(60% 38% at 50% 104%, color-mix(in oklab, var(--accent-2) 13%, transparent), transparent 72%)" }} />
         {/* Ambient colour blobs */}
         <div className="studio-blob -left-40 -top-40 h-[42rem] w-[42rem]" style={{ background: "radial-gradient(circle, var(--accent-1), transparent 60%)" }} />
         <div className="studio-blob -right-32 top-32 h-[38rem] w-[38rem]" style={{ background: "radial-gradient(circle, var(--accent-2), transparent 60%)", animationDelay: "-6s" }} />
@@ -561,6 +568,12 @@ export function HomePage() {
         <div className="bp-accent bp-accent--dot bp-accent--drift-a right-[18%] top-[46%] h-2 w-2" />
         <div className="bp-accent bp-accent--dot bp-accent--drift-b left-[30%] top-[40%] h-2.5 w-2.5" />
         <div className="bp-accent bp-accent--dot bp-accent--drift-c left-[16%] bottom-[34%] h-2 w-2" />
+        <div className="bp-accent bp-accent--dot bp-accent--drift-a left-[48%] top-[18%] h-2 w-2" />
+        <div className="bp-accent bp-accent--dot bp-accent--drift-b right-[40%] bottom-[40%] h-2.5 w-2.5" />
+        <div className="bp-accent bp-accent--dot bp-accent--drift-c left-[58%] top-[62%] h-2 w-2" />
+        <div className="bp-accent bp-accent--dot bp-accent--drift-a right-[26%] top-[80%] h-2.5 w-2.5" />
+        <div className="bp-accent bp-accent--dot bp-accent--drift-b left-[40%] bottom-[12%] h-2 w-2" />
+        <div className="bp-accent bp-accent--ring bp-accent--drift-b left-[46%] top-[50%] h-[11rem] w-[11rem]" />
 
         {/* Cursor-parallax glossy bubbles (kept, on top) */}
         <SphereField />
