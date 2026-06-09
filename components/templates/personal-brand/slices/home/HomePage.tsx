@@ -543,39 +543,28 @@ export function HomePage() {
     <div className="studio-root relative isolate" style={{ "--accent-1": accent, "--accent-2": accent2 } as React.CSSProperties}>
       {/* ambient background */}
       <div aria-hidden className="absolute inset-0 -z-10 overflow-hidden">
-        {/* Dark gradient base + thin liquid-glass sheen */}
+        {/* Dark gradient base */}
         <div className="absolute inset-0" style={{ background: "radial-gradient(135% 95% at 50% -15%, #10162e 0%, #0a0c1c 36%, #070810 68%, #050509 100%)" }} />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.045) 0%, transparent 16%), radial-gradient(60% 38% at 50% 104%, color-mix(in oklab, var(--accent-2) 13%, transparent), transparent 72%)" }} />
-        {/* Ambient colour blobs */}
-        <div className="studio-blob -left-40 -top-40 h-[42rem] w-[42rem]" style={{ background: "radial-gradient(circle, var(--accent-1), transparent 60%)" }} />
-        <div className="studio-blob -right-32 top-32 h-[38rem] w-[38rem]" style={{ background: "radial-gradient(circle, var(--accent-2), transparent 60%)", animationDelay: "-6s" }} />
-        <div className="studio-blob left-1/3 top-[58%] h-[34rem] w-[34rem]" style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--accent-1) 60%, #4f8ae0), transparent 60%)", animationDelay: "-11s", opacity: 0.3 }} />
 
-        {/* Glowing blue blueprint grid: blurred bloom → fine → major lines → pulsing centre hotspot, screen-blended + radially masked (brightest centre, fading to edges) */}
-        <div className="bp-grid">
-          <div className="bp-grid__bloom" />
-          <div className="bp-grid__fine" />
-          <div className="bp-grid__major" />
-          <div className="bp-grid__glow" />
-        </div>
+        {/* Large, heavily-blurred dark navy/indigo blobs that merge into one fluid cloud.
+            Every colour is pre-mixed toward near-black + low opacity so they tint, never illuminate. */}
+        <div className="studio-blob -left-48 -top-44 h-[46rem] w-[46rem]" style={{ filter: "blur(130px) saturate(1.05)", opacity: 0.32, background: "radial-gradient(circle at 38% 34%, color-mix(in oklab, var(--accent-1) 60%, #05060f), transparent 64%)" }} />
+        <div className="studio-blob -right-56 -top-32 h-[42rem] w-[42rem]" style={{ filter: "blur(140px) saturate(1.05)", opacity: 0.24, animationDelay: "-5s", background: "radial-gradient(circle at 60% 40%, color-mix(in oklab, #4f8ae0 52%, #06070f), transparent 66%)" }} />
+        <div className="studio-blob left-[18%] top-[42%] h-[40rem] w-[40rem]" style={{ filter: "blur(150px) saturate(1.0)", opacity: 0.2, animationDelay: "-10s", background: "radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--accent-2) 40%, #05060d), transparent 68%)" }} />
+        <div className="studio-blob -right-32 bottom-[-14%] h-[44rem] w-[44rem]" style={{ filter: "blur(135px) saturate(1.05)", opacity: 0.26, animationDelay: "-7s", background: "radial-gradient(circle at 44% 46%, color-mix(in oklab, var(--accent-1) 50%, #05050c), transparent 65%)" }} />
+        <div className="studio-blob left-[-10%] bottom-[-18%] h-[38rem] w-[38rem]" style={{ filter: "blur(150px) saturate(1.0)", opacity: 0.18, animationDelay: "-13s", background: "radial-gradient(circle at 56% 50%, color-mix(in oklab, #4f8ae0 42%, #05060e), transparent 67%)" }} />
 
-        {/* Slowly-drifting thin geometric accents — tasteful, low opacity */}
-        <div className="bp-accent bp-accent--ring bp-accent--drift-a left-[12%] top-[22%] h-[14rem] w-[14rem]" />
-        <div className="bp-accent bp-accent--ring bp-accent--spin right-[14%] top-[16%] h-[8rem] w-[8rem]" />
-        <div className="bp-accent bp-accent--ring bp-accent--drift-c right-[22%] bottom-[16%] h-[20rem] w-[20rem]" />
-        <div className="bp-accent bp-accent--plus bp-accent--drift-b left-[22%] bottom-[26%] h-10 w-10" />
-        <div className="bp-accent bp-accent--plus bp-accent--drift-c right-[30%] top-[30%] h-7 w-7" />
-        <div className="bp-accent bp-accent--dot bp-accent--drift-a right-[18%] top-[46%] h-2 w-2" />
-        <div className="bp-accent bp-accent--dot bp-accent--drift-b left-[30%] top-[40%] h-2.5 w-2.5" />
-        <div className="bp-accent bp-accent--dot bp-accent--drift-c left-[16%] bottom-[34%] h-2 w-2" />
-        <div className="bp-accent bp-accent--dot bp-accent--drift-a left-[48%] top-[18%] h-2 w-2" />
-        <div className="bp-accent bp-accent--dot bp-accent--drift-b right-[40%] bottom-[40%] h-2.5 w-2.5" />
-        <div className="bp-accent bp-accent--dot bp-accent--drift-c left-[58%] top-[62%] h-2 w-2" />
-        <div className="bp-accent bp-accent--dot bp-accent--drift-a right-[26%] top-[80%] h-2.5 w-2.5" />
-        <div className="bp-accent bp-accent--dot bp-accent--drift-b left-[40%] bottom-[12%] h-2 w-2" />
-        <div className="bp-accent bp-accent--ring bp-accent--drift-b left-[46%] top-[50%] h-[11rem] w-[11rem]" />
+        {/* Veil — fuses the blobs into one continuous organic cloud (no hard edges) */}
+        <div className="studio-veil" style={{ background: "radial-gradient(58% 50% at 30% 22%, color-mix(in oklab, var(--accent-1) 22%, transparent), transparent 70%), radial-gradient(54% 48% at 74% 64%, color-mix(in oklab, var(--accent-2) 16%, transparent), transparent 72%), radial-gradient(60% 55% at 50% 100%, color-mix(in oklab, #4f8ae0 14%, transparent), transparent 70%)" }} />
 
-        {/* Cursor-parallax glossy bubbles (kept, on top) */}
+        {/* Two thin, dim ring outlines (reference accent) */}
+        <div className="studio-ring left-[8%] top-[14%] h-[20rem] w-[20rem]" />
+        <div className="studio-ring right-[10%] bottom-[16%] h-[28rem] w-[28rem]" />
+
+        {/* Readability guard — darkens the heading zone + a faint full-field vignette so white text stays clear regardless of blob drift */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(5,5,9,0.5) 0%, rgba(5,5,9,0.12) 30%, transparent 55%), radial-gradient(120% 90% at 50% 30%, transparent 55%, rgba(5,5,9,0.28) 100%), radial-gradient(60% 38% at 50% 104%, color-mix(in oklab, var(--accent-2) 9%, transparent), transparent 72%)" }} />
+
+        {/* Floating glossy spheres — kept (cursor-parallax) */}
         <SphereField />
       </div>
 

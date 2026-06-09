@@ -551,3 +551,37 @@ body:has(.theme-studio) {
 @keyframes bp-spin {
   to { transform: rotate(360deg); }
 }
+
+/* ---- Dark fluid-field: blob-blending veil + thin ring outlines ---- */
+.studio-veil {
+  position: absolute;
+  inset: -12%;
+  border-radius: 9999px;
+  filter: blur(120px) saturate(1.1);
+  opacity: 0.5;
+  will-change: transform;
+  pointer-events: none;
+}
+.studio-ring {
+  position: absolute;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklab, var(--accent-2) 22%, transparent);
+  background: transparent;
+  filter: blur(0.5px);
+  opacity: 0.16;
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--accent-1) 8%, transparent) inset;
+  will-change: transform;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .studio-veil { animation: veil-drift 32s ease-in-out infinite alternate; }
+  .studio-ring { animation: ring-breathe 22s ease-in-out infinite; }
+}
+@keyframes veil-drift {
+  0%   { transform: translate3d(-2%, -1.5%, 0) scale(1.04); }
+  100% { transform: translate3d(2.5%, 2%, 0) scale(1.12); }
+}
+@keyframes ring-breathe {
+  0%, 100% { transform: scale(1);    opacity: 0.16; }
+  50%      { transform: scale(1.06); opacity: 0.24; }
+}
