@@ -4,6 +4,9 @@
 export type Brand = {
   brandLetter: string;
   brandName: string;
+  /** Optional uploaded logo image URL (Settings → Site). When set, the nav and
+   *  footer render this image instead of the letter chip. */
+  logoUrl?: string;
   tagline: string;
   description: string;
   baseUrl: string;
