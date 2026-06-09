@@ -5,16 +5,12 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { SiteShell } from "@/components/templates/_shared/ui/site-shell";
 import { DEFAULT_SITE_CONFIG } from "@/components/templates/personal-brand/shared/site-config";
-import {
-  FOOTER_COLUMNS,
-  FOOTER_TAGLINE,
-  PUBLIC_NAV,
-} from "@/components/templates/personal-brand/shared/nav-config";
+import { PUBLIC_NAV } from "@/components/templates/personal-brand/shared/nav-config";
 
 /**
- * Public chrome (nav + footer) with owner branding applied at runtime — the
- * brand name + tagline come from Convex `siteSettings` (set in onboarding /
- * admin Settings), falling back to the template defaults before load.
+ * Public chrome (minimal nav + minimal footer). Brand name comes from Convex
+ * `siteSettings` (admin Settings), falling back to template defaults. Footer is
+ * trimmed to brand + socials + copyright (no link columns / template bio).
  */
 export function PublicChrome({ children }: { children: ReactNode }) {
   const s = useQuery(api.settings.get);
@@ -23,16 +19,15 @@ export function PublicChrome({ children }: { children: ReactNode }) {
     ...DEFAULT_SITE_CONFIG,
     brandName,
     brandLetter: brandName.charAt(0).toUpperCase() || DEFAULT_SITE_CONFIG.brandLetter,
+    description: "",
   };
-  const tagline = s?.tagline || FOOTER_TAGLINE;
 
   return (
     <SiteShell
       brand={brand}
       homeHref="/"
       navItems={PUBLIC_NAV}
-      footerColumns={FOOTER_COLUMNS}
-      footerTagline={tagline}
+      footerColumns={[]}
       copyrightHolder={brand.brandName}
     >
       {children}

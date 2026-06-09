@@ -42,7 +42,7 @@ export function SiteFooter({
             <span className="grid size-7 place-items-center rounded-md bg-foreground text-background">{brand.brandLetter}</span>
             <span>{brand.brandName}</span>
           </Link>
-          <p className="mt-3 max-w-sm text-sm text-muted-foreground">{brand.description}</p>
+          {brand.description ? <p className="mt-3 max-w-sm text-sm text-muted-foreground">{brand.description}</p> : null}
           {belowBrand}
           {socials.length > 0 && (
             <div className="mt-4 flex items-center gap-2">
