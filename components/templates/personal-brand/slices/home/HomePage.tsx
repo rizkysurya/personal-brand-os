@@ -564,6 +564,9 @@ export function HomePage() {
         {/* Readability guard — darkens the heading zone + a faint full-field vignette so white text stays clear regardless of blob drift */}
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(5,6,12,0.28) 0%, rgba(5,6,12,0.05) 24%, transparent 46%), radial-gradient(125% 95% at 50% 26%, transparent 64%, rgba(5,6,12,0.12) 100%)" }} />
 
+        {/* Film grain — subtle texture so the gradient never looks flat/plain + kills banding */}
+        <div aria-hidden className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "220px 220px" }} />
+
         {/* Floating glossy spheres — kept (cursor-parallax) */}
         <SphereField />
       </div>
