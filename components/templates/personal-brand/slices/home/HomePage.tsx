@@ -602,12 +602,12 @@ export function HomePage() {
           </div>
         </div>
 
-        {/* right: liquid-glass showcase orb with the logo */}
+        {/* right: liquid-glass framed portrait photo */}
         <div className="reveal relative hidden md:col-span-5 md:block" style={{ animationDelay: "0.2s" }}>
-          <div className="glass glow-border float-y relative mx-auto grid aspect-square max-w-sm place-items-center rounded-[2.5rem]">
-            <div aria-hidden className="pointer-events-none absolute inset-0 rounded-[2.5rem]" style={{ background: "radial-gradient(60% 60% at 50% 42%, color-mix(in oklab, var(--accent-1) 38%, transparent), transparent 72%)" }} />
+          <div className="glass glow-border float-y relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-[2rem]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.svg" alt={name} className="relative size-28 drop-shadow-[0_8px_30px_rgba(84,86,246,0.55)]" />
+            <img src="/foto.jpg" alt={name} className="h-full w-full object-cover object-[center_22%]" />
+            <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(5,8,18,0.6) 100%)" }} />
           </div>
         </div>
       </section>
