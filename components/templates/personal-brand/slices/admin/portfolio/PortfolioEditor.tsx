@@ -37,6 +37,7 @@ export function PortfolioEditor({ id }: { id: string | null }) {
   const [category, setCategory] = React.useState(existing?.category ?? CATEGORIES[0]);
   const [cover, setCover] = React.useState(existing?.cover ?? "");
   const [videoUrl, setVideoUrl] = React.useState(existing?.videoUrl ?? "");
+  const [credit, setCredit] = React.useState(existing?.credit ?? "");
   const [blurb, setBlurb] = React.useState(existing?.blurb ?? "");
   const [problem, setProblem] = React.useState(existing?.problem ?? "");
   const [approach, setApproach] = React.useState(existing?.approach ?? "");
@@ -58,6 +59,7 @@ export function PortfolioEditor({ id }: { id: string | null }) {
       category,
       cover,
       videoUrl: videoUrl.trim(),
+      credit: credit.trim(),
       blurb,
       problem,
       approach,
@@ -111,6 +113,20 @@ export function PortfolioEditor({ id }: { id: string | null }) {
               rows={2}
               placeholder="Blurb singkat — 1 kalimat headline (opsional)"
             />
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">
+                Kredit — peran · studio · klien <span className="text-muted-foreground/60">(opsional)</span>
+              </label>
+              <Input
+                value={credit}
+                onChange={(e) => setCredit(e.target.value)}
+                placeholder="2D Animator · Zeus Animation · Client: BCA"
+                className="mt-1"
+              />
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                Untuk karya dari studio sebelumnya: tulis peranmu + kredit studio (mis. “Animator · Zeus Animation”). Tampil sebagai baris kecil di kartu & halaman detail — jujur soal peran sekaligus melindungimu.
+              </p>
+            </div>
             <div>
               <label className="text-xs font-medium text-muted-foreground">
                 Video URL — YouTube / Vimeo <span className="text-muted-foreground/60">(opsional)</span>

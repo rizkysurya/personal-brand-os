@@ -32,6 +32,7 @@ export default defineSchema({
     category: v.string(),
     cover: v.string(),
     videoUrl: v.optional(v.string()),
+    credit: v.optional(v.string()),
     blurb: v.string(),
     problem: v.string(),
     approach: v.string(),

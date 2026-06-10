@@ -9,7 +9,7 @@ import { usePortfolio, useServices } from "../../shared/store";
 /* --- Defaults: shown when a homeConfig field is empty. Tuned for a Motion
    Graphic Designer CV (Rizky Surya Pratama). The owner overrides any from
    /admin (Tampilan Beranda / Settings / Services / Portfolio). --- */
-type WorkCard = { title: string; category: string; cover?: string; videoUrl?: string; slug?: string; tint: string };
+type WorkCard = { title: string; category: string; cover?: string; videoUrl?: string; credit?: string; slug?: string; tint: string };
 
 const PLACEHOLDER_WORK: WorkCard[] = [
   { title: "Financial Explainer Video", category: "Motion / Animation", tint: "from-indigo-500/40 to-sky-400/30" },
@@ -313,6 +313,7 @@ export function HomePage() {
           category: String(p.category ?? "Work"),
           cover: cover || undefined,
           videoUrl,
+          credit: typeof p.credit === "string" && p.credit ? p.credit : undefined,
           slug: typeof p.slug === "string" ? p.slug : "",
           tint: PLACEHOLDER_WORK[i % PLACEHOLDER_WORK.length].tint,
         };
@@ -537,8 +538,11 @@ export function HomePage() {
                   ) : null}
                 </div>
                 <div className="flex items-center justify-between gap-3 p-5">
-                  <h3 className="text-base font-semibold text-white">{w.title}</h3>
-                  <span className="text-white/40 transition-transform group-hover:translate-x-1 group-hover:text-[var(--accent-1)]">{w.videoUrl ? "▶" : "→"}</span>
+                  <div className="min-w-0">
+                    <h3 className="truncate text-base font-semibold text-white">{w.title}</h3>
+                    {w.credit ? <p className="mt-0.5 truncate text-xs italic text-white/45">{w.credit}</p> : null}
+                  </div>
+                  <span className="shrink-0 text-white/40 transition-transform group-hover:translate-x-1 group-hover:text-[var(--accent-1)]">{w.videoUrl ? "▶" : "→"}</span>
                 </div>
               </div>
             );

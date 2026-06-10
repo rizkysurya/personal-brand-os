@@ -58,6 +58,7 @@ export function PortfolioDetailPage({ slug }: { slug: string }) {
     title: item.title,
     summary: item.blurb,
     tags: [item.category],
+    role: item.credit || undefined,
     cover: { src: item.cover || ytThumb(item.videoUrl) || FALLBACK_COVER, alt: item.title },
     sections: sections.length ? sections : undefined,
     link: item.videoUrl ? { href: item.videoUrl, label: "▶ Tonton video" } : undefined,
@@ -69,6 +70,7 @@ export function PortfolioDetailPage({ slug }: { slug: string }) {
     title: r.title,
     summary: r.blurb,
     tags: [r.category],
+    role: r.credit || undefined,
     cover: { src: r.cover || ytThumb(r.videoUrl) || FALLBACK_COVER, alt: r.title },
   }));
 

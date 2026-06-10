@@ -24,6 +24,7 @@ export type PortfolioItem = {
   category: string;
   cover: string;
   videoUrl?: string;
+  credit?: string;
   blurb: string;
   problem: string;
   approach: string;

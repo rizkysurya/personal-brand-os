@@ -38,6 +38,7 @@ export function PortfolioListPage() {
     title: p.title,
     summary: p.blurb,
     tags: [p.category],
+    role: p.credit || undefined,
     cover: { src: p.cover || ytThumb(p.videoUrl) || FALLBACK_COVER, alt: p.title },
   }));
 
