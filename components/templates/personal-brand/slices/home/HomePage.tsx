@@ -12,12 +12,12 @@ import { usePortfolio, useServices } from "../../shared/store";
 type WorkCard = { title: string; category: string; cover?: string; slug?: string; tint: string };
 
 const PLACEHOLDER_WORK: WorkCard[] = [
-  { title: "Financial Explainer Video", category: "Motion", tint: "from-indigo-500/40 to-sky-400/30" },
-  { title: "2D Character Animation", category: "Animation", tint: "from-blue-500/40 to-cyan-400/30" },
-  { title: "Lottie & GIF Animation", category: "Motion", tint: "from-sky-500/40 to-indigo-400/30" },
-  { title: "Educational Motion Graphics", category: "Motion", tint: "from-cyan-400/40 to-blue-500/30" },
-  { title: "Brand Identity in Motion", category: "Animation", tint: "from-indigo-400/40 to-blue-600/30" },
-  { title: "Banner & Flyer Design", category: "Print", tint: "from-sky-400/40 to-indigo-500/30" },
+  { title: "Financial Explainer Video", category: "Motion / Animation", tint: "from-indigo-500/40 to-sky-400/30" },
+  { title: "2D Character Animation", category: "Motion / Animation", tint: "from-blue-500/40 to-cyan-400/30" },
+  { title: "Instagram Content Series", category: "Desain IG / Print", tint: "from-sky-500/40 to-indigo-400/30" },
+  { title: "Banner & Flyer Design", category: "Desain IG / Print", tint: "from-cyan-400/40 to-blue-500/30" },
+  { title: "Personal Side Project", category: "Side Projects", tint: "from-indigo-400/40 to-blue-600/30" },
+  { title: "Creative Experiment", category: "Side Projects", tint: "from-sky-400/40 to-indigo-500/30" },
 ];
 
 const DEFAULT_SKILLS = [
@@ -32,6 +32,7 @@ const PLACEHOLDER_SERVICES: SvcCard[] = [
   { name: "Motion Graphics", description: "Explainer videos and 2D animation that turn complex topics into clear, compelling motion — from script and storyboard to polished, on-brand delivery.", bullets: ["Explainer videos", "2D character & motion animation", "Sound design & delivery"], featured: true },
   { name: "GIF & Lottie", description: "Lightweight animated assets — GIFs and Lottie files — for web, app, and social.", bullets: ["Lottie production", "Animated GIFs", "Optimized for web & app"] },
   { name: "Print Design", description: "Production-ready print design — banners, flyers, and promotional materials.", bullets: ["Banners & flyers", "Print-ready files", "Consistent branding"] },
+  { name: "Social Media Content", description: "Scroll-stopping motion and graphics for Instagram, TikTok, and beyond — built to grow reach and engagement.", bullets: ["IG & TikTok content", "Animated posts & reels", "On-brand templates"] },
 ];
 
 const DEFAULT_STATS: Array<{ value: string; label: string }> = [
@@ -56,7 +57,7 @@ const DEFAULT_SKILL_GROUPS = [
   { label: "Specializations", items: "Explainer Videos · 2D Animation · Visual Storytelling · Brand Identity" },
 ];
 
-const CATEGORIES = ["All", "Motion", "Animation", "Print"] as const;
+const CATEGORIES = ["All", "Motion / Animation", "Desain IG / Print", "Side Projects"] as const;
 type Category = (typeof CATEGORIES)[number];
 
 const GRADIENT_BTN =
@@ -341,7 +342,16 @@ export function HomePage() {
   const [filter, setFilter] = React.useState<Category>("All");
   const [reelOpen, setReelOpen] = React.useState(false);
   const filteredWork =
-    filter === "All" ? work : work.filter((w) => w.category.toLowerCase().includes(filter.toLowerCase()));
+    filter === "All"
+      ? work
+      : work.filter((w) => {
+          // Match by shared keyword so short admin categories (e.g. "Motion", "IG")
+          // still land under the longer tab names (e.g. "Motion / Animation").
+          const words = (s: string) => s.toLowerCase().split(/[^a-z0-9]+/).filter((t) => t.length >= 2);
+          const cat = words(w.category);
+          const tab = words(filter);
+          return cat.some((t) => tab.includes(t)) || w.category.toLowerCase().includes(filter.toLowerCase());
+        });
 
   useScrollReveal([mounted, work.length, services.length, filter, cfg]);
 
@@ -541,34 +551,18 @@ export function HomePage() {
 
   return (
     <div className="studio-root relative isolate" style={{ "--accent-1": accent, "--accent-2": accent2 } as React.CSSProperties}>
-      {/* ambient background */}
+      {/* ambient background — original soft studio look */}
       <div aria-hidden className="absolute inset-0 -z-10 overflow-hidden">
-        {/* Dark gradient base */}
-        <div className="absolute inset-0" style={{ background: "radial-gradient(135% 95% at 50% -15%, #10162e 0%, #0a0c1c 36%, #070810 68%, #050509 100%)" }} />
+        {/* soft ambient colour blobs */}
+        <div className="studio-blob -left-40 -top-40 h-[42rem] w-[42rem]" style={{ background: "radial-gradient(circle, var(--accent-1), transparent 60%)" }} />
+        <div className="studio-blob -right-32 top-32 h-[38rem] w-[38rem]" style={{ background: "radial-gradient(circle, var(--accent-2), transparent 60%)", animationDelay: "-6s" }} />
+        <div className="studio-blob left-1/3 top-[58%] h-[34rem] w-[34rem]" style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--accent-1) 60%, #4f8ae0), transparent 60%)", animationDelay: "-11s", opacity: 0.3 }} />
 
-        {/* Large, heavily-blurred dark navy/indigo blobs that merge into one fluid cloud.
-            Every colour is pre-mixed toward near-black + low opacity so they tint, never illuminate. */}
-        <div className="studio-blob -left-48 -top-44 h-[46rem] w-[46rem]" style={{ filter: "blur(95px) saturate(1.3)", opacity: 0.8, background: "radial-gradient(circle at 38% 34%, color-mix(in oklab, var(--accent-1) 90%, #11183c), transparent 64%)" }} />
-        <div className="studio-blob -right-56 -top-32 h-[42rem] w-[42rem]" style={{ filter: "blur(105px) saturate(1.3)", opacity: 0.7, animationDelay: "-5s", background: "radial-gradient(circle at 60% 40%, color-mix(in oklab, #4f8ae0 86%, #111a3a), transparent 66%)" }} />
-        <div className="studio-blob left-[18%] top-[42%] h-[40rem] w-[40rem]" style={{ filter: "blur(115px) saturate(1.25)", opacity: 0.6, animationDelay: "-10s", background: "radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--accent-2) 76%, #111a3c), transparent 68%)" }} />
-        <div className="studio-blob -right-32 bottom-[-14%] h-[44rem] w-[44rem]" style={{ filter: "blur(100px) saturate(1.3)", opacity: 0.74, animationDelay: "-7s", background: "radial-gradient(circle at 44% 46%, color-mix(in oklab, var(--accent-1) 86%, #0f1638), transparent 65%)" }} />
-        <div className="studio-blob left-[-10%] bottom-[-18%] h-[38rem] w-[38rem]" style={{ filter: "blur(115px) saturate(1.25)", opacity: 0.58, animationDelay: "-13s", background: "radial-gradient(circle at 56% 50%, color-mix(in oklab, #4f8ae0 74%, #111838), transparent 67%)" }} />
-
-        {/* Veil — fuses the blobs into one continuous organic cloud (no hard edges) */}
-        <div className="studio-veil" style={{ opacity: 0.72, background: "radial-gradient(58% 50% at 30% 22%, color-mix(in oklab, var(--accent-1) 34%, transparent), transparent 70%), radial-gradient(54% 48% at 74% 64%, color-mix(in oklab, var(--accent-2) 26%, transparent), transparent 72%), radial-gradient(60% 55% at 50% 100%, color-mix(in oklab, #4f8ae0 24%, transparent), transparent 70%)" }} />
-
-        {/* Two thin, dim ring outlines (reference accent) */}
-        <div className="studio-ring left-[8%] top-[14%] h-[20rem] w-[20rem]" />
-        <div className="studio-ring right-[10%] bottom-[16%] h-[28rem] w-[28rem]" />
-
-        {/* Readability guard — darkens the heading zone + a faint full-field vignette so white text stays clear regardless of blob drift */}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(5,6,12,0.28) 0%, rgba(5,6,12,0.05) 24%, transparent 46%), radial-gradient(125% 95% at 50% 26%, transparent 64%, rgba(5,6,12,0.12) 100%)" }} />
-
-        {/* Film grain — subtle texture so the gradient never looks flat/plain + kills banding */}
-        <div aria-hidden className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "220px 220px" }} />
-
-        {/* Floating glossy spheres — kept (cursor-parallax) */}
+        {/* floating glossy bubbles — idle drift + cursor parallax */}
         <SphereField />
+
+        {/* faint grid texture, fading out from the top */}
+        <div className="absolute inset-0" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)", backgroundSize: "64px 64px", WebkitMaskImage: "radial-gradient(ellipse 80% 55% at 50% 0%, #000 35%, transparent 100%)", maskImage: "radial-gradient(ellipse 80% 55% at 50% 0%, #000 35%, transparent 100%)" }} />
       </div>
 
       {/* HERO — left-aligned, runlayer-style, with a liquid-glass showcase orb */}
