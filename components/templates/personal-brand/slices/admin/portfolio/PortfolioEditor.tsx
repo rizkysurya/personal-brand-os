@@ -24,7 +24,7 @@ const COVERS = [
   "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=70",
 ];
 
-const CATEGORIES = ["Product", "Brand", "Strategy", "Workshop", "Engineering"];
+const CATEGORIES = ["Motion / Animation", "Desain IG / Print", "Side Projects"];
 
 export function PortfolioEditor({ id }: { id: string | null }) {
   const router = useRouter();
@@ -35,7 +35,8 @@ export function PortfolioEditor({ id }: { id: string | null }) {
   const [title, setTitle] = React.useState(existing?.title ?? "");
   const [slug, setSlug] = React.useState(existing?.slug ?? "");
   const [category, setCategory] = React.useState(existing?.category ?? CATEGORIES[0]);
-  const [cover, setCover] = React.useState(existing?.cover ?? COVERS[0]);
+  const [cover, setCover] = React.useState(existing?.cover ?? "");
+  const [videoUrl, setVideoUrl] = React.useState(existing?.videoUrl ?? "");
   const [blurb, setBlurb] = React.useState(existing?.blurb ?? "");
   const [problem, setProblem] = React.useState(existing?.problem ?? "");
   const [approach, setApproach] = React.useState(existing?.approach ?? "");
@@ -46,8 +47,8 @@ export function PortfolioEditor({ id }: { id: string | null }) {
   }, [title, existing, slug]);
 
   function save() {
-    if (!title || !blurb || !problem || !approach || !result) {
-      toast.error("Lengkapi semua field");
+    if (!title.trim()) {
+      toast.error("Judul wajib diisi");
       return;
     }
     const item: PortfolioItem = {
@@ -56,6 +57,7 @@ export function PortfolioEditor({ id }: { id: string | null }) {
       title,
       category,
       cover,
+      videoUrl: videoUrl.trim(),
       blurb,
       problem,
       approach,
@@ -107,9 +109,24 @@ export function PortfolioEditor({ id }: { id: string | null }) {
               value={blurb}
               onChange={(e) => setBlurb(e.target.value)}
               rows={2}
-              placeholder="Blurb singkat — 1 kalimat headline"
+              placeholder="Blurb singkat — 1 kalimat headline (opsional)"
             />
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">
+                Video URL — YouTube / Vimeo <span className="text-muted-foreground/60">(opsional)</span>
+              </label>
+              <Input
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                placeholder="https://youtu.be/xxxxxxxxxxx"
+                className="mt-1"
+              />
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                Isi link kalau karya ini berupa video — nanti videonya bisa diputar langsung di web, thumbnail otomatis dari YouTube. Kosongkan kalau ini karya gambar/GIF.
+              </p>
+            </div>
             <div className="grid gap-3">
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Case study (opsional)</p>
               <Field label="Problem" value={problem} onChange={setProblem} />
               <Field label="Approach" value={approach} onChange={setApproach} />
               <Field label="Result" value={result} onChange={setResult} />

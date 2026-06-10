@@ -11,6 +11,16 @@ import {
 import { usePortfolio, usePortfolioItem } from "../../shared/store";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 
+const FALLBACK_COVER =
+  "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=1600&q=70";
+
+// Auto-thumbnail from a YouTube URL so video items need no manual cover.
+function ytThumb(url?: string): string {
+  if (!url) return "";
+  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
+  return yt ? `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg` : "";
+}
+
 /**
  * Hybrid wrapper: case-study detail via canonical PortfolioDetailView
  * slice. Problem/Approach/Result populate the new `sections` field
@@ -34,18 +44,23 @@ export function PortfolioDetailPage({ slug }: { slug: string }) {
 
   const related = all.filter((p) => p.id !== item.id && p.category === item.category).slice(0, 3);
 
+  const sections = (
+    [
+      item.problem ? { id: "problem", heading: "Problem", body: item.problem } : null,
+      item.approach ? { id: "approach", heading: "Approach", body: item.approach } : null,
+      item.result ? { id: "result", heading: "Result", body: item.result } : null,
+    ] as Array<{ id: string; heading: string; body: string } | null>
+  ).filter(Boolean) as Array<{ id: string; heading: string; body: string }>;
+
   const sliceItem: SliceItem = {
     id: item.id,
     slug: item.slug,
     title: item.title,
     summary: item.blurb,
     tags: [item.category],
-    cover: { src: item.cover, alt: item.title },
-    sections: [
-      { id: "problem", heading: "Problem", body: item.problem },
-      { id: "approach", heading: "Approach", body: item.approach },
-      { id: "result", heading: "Result", body: item.result },
-    ],
+    cover: { src: item.cover || ytThumb(item.videoUrl) || FALLBACK_COVER, alt: item.title },
+    sections: sections.length ? sections : undefined,
+    link: item.videoUrl ? { href: item.videoUrl, label: "▶ Tonton video" } : undefined,
   };
 
   const relatedItems: SliceItem[] = related.map((r) => ({
@@ -54,7 +69,7 @@ export function PortfolioDetailPage({ slug }: { slug: string }) {
     title: r.title,
     summary: r.blurb,
     tags: [r.category],
-    cover: { src: r.cover, alt: r.title },
+    cover: { src: r.cover || ytThumb(r.videoUrl) || FALLBACK_COVER, alt: r.title },
   }));
 
   return (

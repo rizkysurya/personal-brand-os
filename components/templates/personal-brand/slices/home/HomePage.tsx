@@ -9,7 +9,7 @@ import { usePortfolio, useServices } from "../../shared/store";
 /* --- Defaults: shown when a homeConfig field is empty. Tuned for a Motion
    Graphic Designer CV (Rizky Surya Pratama). The owner overrides any from
    /admin (Tampilan Beranda / Settings / Services / Portfolio). --- */
-type WorkCard = { title: string; category: string; cover?: string; slug?: string; tint: string };
+type WorkCard = { title: string; category: string; cover?: string; videoUrl?: string; slug?: string; tint: string };
 
 const PLACEHOLDER_WORK: WorkCard[] = [
   { title: "Financial Explainer Video", category: "Motion / Animation", tint: "from-indigo-500/40 to-sky-400/30" },
@@ -282,6 +282,13 @@ function toEmbed(url: string): string {
   return url;
 }
 
+// Auto-thumbnail from a YouTube URL (so video items need no manual cover).
+function ytThumb(url?: string): string {
+  if (!url) return "";
+  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
+  return yt ? `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg` : "";
+}
+
 export function HomePage() {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
@@ -297,13 +304,19 @@ export function HomePage() {
   const work: WorkCard[] = React.useMemo(() => {
     const rows = portfolioRaw as unknown as Array<Record<string, unknown>>;
     if (rows && rows.length > 0) {
-      return rows.slice(0, 6).map((p, i) => ({
-        title: String(p.title ?? "Project"),
-        category: String(p.category ?? "Work"),
-        cover: typeof p.cover === "string" && p.cover ? p.cover : undefined,
-        slug: typeof p.slug === "string" ? p.slug : "",
-        tint: PLACEHOLDER_WORK[i % PLACEHOLDER_WORK.length].tint,
-      }));
+      return rows.slice(0, 6).map((p, i) => {
+        const videoUrl = typeof p.videoUrl === "string" && p.videoUrl ? p.videoUrl : undefined;
+        const cover =
+          (typeof p.cover === "string" && p.cover ? p.cover : "") || ytThumb(videoUrl);
+        return {
+          title: String(p.title ?? "Project"),
+          category: String(p.category ?? "Work"),
+          cover: cover || undefined,
+          videoUrl,
+          slug: typeof p.slug === "string" ? p.slug : "",
+          tint: PLACEHOLDER_WORK[i % PLACEHOLDER_WORK.length].tint,
+        };
+      });
     }
     return PLACEHOLDER_WORK;
   }, [portfolioRaw]);
@@ -341,6 +354,7 @@ export function HomePage() {
 
   const [filter, setFilter] = React.useState<Category>("All");
   const [reelOpen, setReelOpen] = React.useState(false);
+  const [videoModal, setVideoModal] = React.useState<string | null>(null);
   const filteredWork =
     filter === "All"
       ? work
@@ -516,16 +530,29 @@ export function HomePage() {
                   )}
                   <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
                   <span className="absolute left-3 top-3 rounded-full border border-white/15 bg-black/40 px-3 py-1 text-xs text-white/85 backdrop-blur-md">{w.category}</span>
+                  {w.videoUrl ? (
+                    <span className="absolute inset-0 grid place-items-center">
+                      <span className="grid size-14 place-items-center rounded-full border border-white/30 bg-black/40 pl-1 text-xl text-white backdrop-blur-md transition-transform duration-200 group-hover:scale-110">▶</span>
+                    </span>
+                  ) : null}
                 </div>
                 <div className="flex items-center justify-between gap-3 p-5">
                   <h3 className="text-base font-semibold text-white">{w.title}</h3>
-                  <span className="text-white/40 transition-transform group-hover:translate-x-1 group-hover:text-[var(--accent-1)]">→</span>
+                  <span className="text-white/40 transition-transform group-hover:translate-x-1 group-hover:text-[var(--accent-1)]">{w.videoUrl ? "▶" : "→"}</span>
                 </div>
               </div>
             );
             return (
               <div key={i} className="studio-reveal" style={{ transitionDelay: `${(i % 3) * 80}ms` }}>
-                {w.slug ? <Link href={`/portfolio/${w.slug}`}>{card}</Link> : card}
+                {w.videoUrl ? (
+                  <button type="button" onClick={() => setVideoModal(w.videoUrl!)} className="block w-full cursor-pointer text-left">
+                    {card}
+                  </button>
+                ) : w.slug ? (
+                  <Link href={`/portfolio/${w.slug}`}>{card}</Link>
+                ) : (
+                  card
+                )}
               </div>
             );
           })}
@@ -619,6 +646,19 @@ export function HomePage() {
             </button>
             <div className="aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black shadow-2xl">
               <iframe src={toEmbed(showreelUrl)} className="h-full w-full" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen title="Showreel" />
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {videoModal ? (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/85 p-4 backdrop-blur-sm" onClick={() => setVideoModal(null)}>
+          <div className="relative w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
+            <button type="button" onClick={() => setVideoModal(null)} className="absolute -top-9 right-0 text-sm text-white/70 transition-colors hover:text-white">
+              ✕ Close
+            </button>
+            <div className="aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black shadow-2xl">
+              <iframe src={toEmbed(videoModal)} className="h-full w-full" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen title="Portfolio video" />
             </div>
           </div>
         </div>

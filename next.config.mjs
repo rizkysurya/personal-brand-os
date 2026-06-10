@@ -12,6 +12,9 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "plus.unsplash.com" },
+      // YouTube auto-thumbnails for video portfolio items.
+      { protocol: "https", hostname: "img.youtube.com" },
+      { protocol: "https", hostname: "i.ytimg.com" },
       // Convex storage (admin-uploaded images) — any deployment subdomain.
       { protocol: "https", hostname: "**.convex.cloud", pathname: "/api/storage/**" },
     ],

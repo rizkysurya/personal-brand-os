@@ -11,6 +11,15 @@ import {
 import { usePortfolio } from "../../shared/store";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 
+const FALLBACK_COVER =
+  "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=1600&q=70";
+
+function ytThumb(url?: string): string {
+  if (!url) return "";
+  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
+  return yt ? `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg` : "";
+}
+
 /**
  * Hybrid wrapper: filter chrome bespoke (category chips), grid delegated to
  * canonical PortfolioListSection slice. Admin edits propagate via
@@ -29,7 +38,7 @@ export function PortfolioListPage() {
     title: p.title,
     summary: p.blurb,
     tags: [p.category],
-    cover: { src: p.cover, alt: p.title },
+    cover: { src: p.cover || ytThumb(p.videoUrl) || FALLBACK_COVER, alt: p.title },
   }));
 
   return (
