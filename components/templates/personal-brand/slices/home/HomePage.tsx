@@ -12,12 +12,12 @@ import { usePortfolio, useServices } from "../../shared/store";
 type WorkCard = { title: string; category: string; cover?: string; videoUrl?: string; credit?: string; slug?: string; tint: string };
 
 const PLACEHOLDER_WORK: WorkCard[] = [
-  { title: "Financial Explainer Video", category: "Motion / Animation", tint: "from-indigo-500/40 to-sky-400/30" },
-  { title: "2D Character Animation", category: "Motion / Animation", tint: "from-blue-500/40 to-cyan-400/30" },
-  { title: "Instagram Content Series", category: "Desain IG / Print", tint: "from-sky-500/40 to-indigo-400/30" },
-  { title: "Banner & Flyer Design", category: "Desain IG / Print", tint: "from-cyan-400/40 to-blue-500/30" },
-  { title: "Personal Side Project", category: "Side Projects", tint: "from-indigo-400/40 to-blue-600/30" },
-  { title: "Creative Experiment", category: "Side Projects", tint: "from-sky-400/40 to-indigo-500/30" },
+  { title: "2D Explainer Video", category: "Zeus Animation", credit: "2D Animator · Zeus Animation", tint: "from-indigo-500/40 to-sky-400/30" },
+  { title: "Animated GIF & Lottie", category: "Zeus Animation", credit: "2D Animator · Zeus Animation", tint: "from-blue-500/40 to-cyan-400/30" },
+  { title: "How-to Instructional Video", category: "Hukummu", credit: "Motion Graphic Designer · Hukummu", tint: "from-sky-500/40 to-indigo-400/30" },
+  { title: "Financial Motion Graphic", category: "Side Projects", credit: "Motion Graphic Designer · Tuntun Sekuritas", tint: "from-cyan-400/40 to-blue-500/30" },
+  { title: "Banner & Flyer Design", category: "Side Projects", credit: "Graphic Designer · Freelance", tint: "from-indigo-400/40 to-blue-600/30" },
+  { title: "Promotional Print", category: "Side Projects", credit: "Graphic Designer · CV Mitra Utama", tint: "from-sky-400/40 to-indigo-500/30" },
 ];
 
 const DEFAULT_SKILLS = [
@@ -57,7 +57,7 @@ const DEFAULT_SKILL_GROUPS = [
   { label: "Specializations", items: "Explainer Videos · 2D Animation · Visual Storytelling · Brand Identity" },
 ];
 
-const CATEGORIES = ["All", "Motion / Animation", "Desain IG / Print", "Side Projects"] as const;
+const CATEGORIES = ["All", "Zeus Animation", "Hukummu", "Side Projects"] as const;
 type Category = (typeof CATEGORIES)[number];
 
 const GRADIENT_BTN =
