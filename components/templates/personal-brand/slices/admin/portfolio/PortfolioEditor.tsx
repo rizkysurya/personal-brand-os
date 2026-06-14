@@ -24,7 +24,7 @@ const COVERS = [
   "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=70",
 ];
 
-const CATEGORIES = ["Motion / Animation", "Desain IG / Print", "Side Projects"];
+const CATEGORIES = ["Zeus Animation", "Hukummu", "Side Projects"];
 
 export function PortfolioEditor({ id }: { id: string | null }) {
   const router = useRouter();
