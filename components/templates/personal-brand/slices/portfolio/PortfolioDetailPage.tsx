@@ -21,6 +21,16 @@ function ytThumb(url?: string): string {
   return yt ? `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg` : "";
 }
 
+// Convert a YouTube/Vimeo URL into an embeddable player URL (no autoplay).
+function toEmbed(url?: string): string {
+  if (!url) return "";
+  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
+  if (yt) return `https://www.youtube.com/embed/${yt[1]}?rel=0`;
+  const vm = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vm) return `https://player.vimeo.com/video/${vm[1]}`;
+  return url;
+}
+
 /**
  * Hybrid wrapper: case-study detail via canonical PortfolioDetailView
  * slice. Problem/Approach/Result populate the new `sections` field
@@ -61,7 +71,6 @@ export function PortfolioDetailPage({ slug }: { slug: string }) {
     role: item.credit || undefined,
     cover: { src: item.cover || ytThumb(item.videoUrl) || FALLBACK_COVER, alt: item.title },
     sections: sections.length ? sections : undefined,
-    link: item.videoUrl ? { href: item.videoUrl, label: "▶ Tonton video" } : undefined,
   };
 
   const relatedItems: SliceItem[] = related.map((r) => ({
@@ -77,6 +86,7 @@ export function PortfolioDetailPage({ slug }: { slug: string }) {
   return (
     <PortfolioDetailView
       item={sliceItem}
+      embedUrl={item.videoUrl ? toEmbed(item.videoUrl) : undefined}
       backHref={`${PUBLIC_BASE}/portfolio`}
       related={relatedItems}
       hrefForRelated={(r) => `${PUBLIC_BASE}/portfolio/${r.slug}`}

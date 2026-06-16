@@ -14,6 +14,8 @@ import type { PortfolioItem } from "./PortfolioListSection";
 export type PortfolioDetailViewProps = {
   item: PortfolioItem;
   backHref?: string;
+  /** When set, an embedded video iframe (YouTube/Vimeo) replaces the cover hero. */
+  embedUrl?: string;
   /** Render markdown/plain body. Default: split on \n\n into <p>. */
   renderBody?: (body: string) => ReactNode;
   /** Show related items below (next/prev or "More work"). */
@@ -104,6 +106,7 @@ function Related({
 export function PortfolioDetailView({
   item,
   backHref,
+  embedUrl,
   renderBody,
   related,
   hrefForRelated,
@@ -141,15 +144,27 @@ export function PortfolioDetailView({
           />
         </header>
 
-        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg border bg-muted">
-          <Image
-            src={item.cover.src}
-            alt={item.cover.alt}
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
+        {embedUrl ? (
+          <div className="relative aspect-video w-full overflow-hidden rounded-lg border bg-black">
+            <iframe
+              src={embedUrl}
+              className="absolute inset-0 h-full w-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+              allowFullScreen
+              title={item.title}
+            />
+          </div>
+        ) : (
+          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg border bg-muted">
+            <Image
+              src={item.cover.src}
+              alt={item.cover.alt}
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        )}
 
         <Separator />
 

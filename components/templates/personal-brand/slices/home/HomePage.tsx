@@ -355,7 +355,6 @@ export function HomePage() {
 
   const [filter, setFilter] = React.useState<Category>("All");
   const [reelOpen, setReelOpen] = React.useState(false);
-  const [videoModal, setVideoModal] = React.useState<string | null>(null);
   const filteredWork =
     filter === "All"
       ? work
@@ -548,15 +547,7 @@ export function HomePage() {
             );
             return (
               <div key={i} className="studio-reveal" style={{ transitionDelay: `${(i % 3) * 80}ms` }}>
-                {w.videoUrl ? (
-                  <button type="button" onClick={() => setVideoModal(w.videoUrl!)} className="block w-full cursor-pointer text-left">
-                    {card}
-                  </button>
-                ) : w.slug ? (
-                  <Link href={`/portfolio/${w.slug}`}>{card}</Link>
-                ) : (
-                  card
-                )}
+                {w.slug ? <Link href={`/portfolio/${w.slug}`}>{card}</Link> : card}
               </div>
             );
           })}
@@ -655,18 +646,6 @@ export function HomePage() {
         </div>
       ) : null}
 
-      {videoModal ? (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-black/85 p-4 backdrop-blur-sm" onClick={() => setVideoModal(null)}>
-          <div className="relative w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
-            <button type="button" onClick={() => setVideoModal(null)} className="absolute -top-9 right-0 text-sm text-white/70 transition-colors hover:text-white">
-              ✕ Close
-            </button>
-            <div className="aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black shadow-2xl">
-              <iframe src={toEmbed(videoModal)} className="h-full w-full" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen title="Portfolio video" />
-            </div>
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }
