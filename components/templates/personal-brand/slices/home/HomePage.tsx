@@ -14,7 +14,7 @@ type WorkCard = { title: string; category: string; cover?: string; videoUrl?: st
 const PLACEHOLDER_WORK: WorkCard[] = [
   { title: "2D Explainer Video", category: "Zeus Animation", credit: "2D Animator · Zeus Animation", tint: "from-indigo-500/40 to-sky-400/30" },
   { title: "Animated GIF & Lottie", category: "Zeus Animation", credit: "2D Animator · Zeus Animation", tint: "from-blue-500/40 to-cyan-400/30" },
-  { title: "How-to Instructional Video", category: "Hukummu", credit: "Motion Graphic Designer · Hukummu", tint: "from-sky-500/40 to-indigo-400/30" },
+  { title: "How-to Instructional Video", category: "Hukumku", credit: "Motion Graphic Designer · Hukumku", tint: "from-sky-500/40 to-indigo-400/30" },
   { title: "Financial Motion Graphic", category: "Side Projects", credit: "Motion Graphic Designer · Tuntun Sekuritas", tint: "from-cyan-400/40 to-blue-500/30" },
   { title: "Banner & Flyer Design", category: "Side Projects", credit: "Graphic Designer · Freelance", tint: "from-indigo-400/40 to-blue-600/30" },
   { title: "Promotional Print", category: "Side Projects", credit: "Graphic Designer · CV Mitra Utama", tint: "from-sky-400/40 to-indigo-500/30" },
@@ -44,7 +44,7 @@ const DEFAULT_STATS: Array<{ value: string; label: string }> = [
 
 const DEFAULT_EXPERIENCE = [
   { period: "Nov 2025 – Present", role: "Motion Graphic Designer", place: "Tuntun Sekuritas Indonesia", description: "Creating educational motion graphics that simplify complex financial and investment topics into engaging, easy-to-understand visuals — managing production end to end, from research and storyboarding to final rendering." },
-  { period: "Aug 2025 – Nov 2025", role: "Motion Graphic Designer (Project-Based)", place: "PT Teknologi Legal Bersama (Hukummu)", description: "Produced instructional “How to Use” videos for a newly launched website — animating and editing from scripts, screen recordings, and references, with text animations and visual cues that improve user understanding." },
+  { period: "Aug 2025 – Nov 2025", role: "Motion Graphic Designer (Project-Based)", place: "PT Teknologi Legal Bersama (Hukumku)", description: "Produced instructional “How to Use” videos for a newly launched website — animating and editing from scripts, screen recordings, and references, with text animations and visual cues that improve user understanding." },
   { period: "Feb 2021 – Aug 2025", role: "Graphic Designer & Animator", place: "Zeus Animation", description: "Core animator turning storyboards into 2D explainer videos, animated GIFs, and Lottie animations in Adobe Animate and After Effects, finished in Premiere Pro. Delivered 50+ projects and helped define the studio’s signature style." },
   { period: "Jul 2020 – Feb 2021", role: "Graphic Designer (Freelance)", place: "Freelance", description: "Freelance print design for SME clients — banners, brochures, and flyers — supporting their branding and promotion with high-quality, print-ready results." },
   { period: "Jul 2019 – Jul 2020", role: "Graphic Designer", place: "CV Mitra Utama Digital Printing", description: "Designed retail and promotional print materials, prepared production-ready files to printing specs, and ran pre-print quality control to cut errors." },
@@ -57,7 +57,7 @@ const DEFAULT_SKILL_GROUPS = [
   { label: "Specializations", items: "Explainer Videos · 2D Animation · Visual Storytelling · Brand Identity" },
 ];
 
-const CATEGORIES = ["All", "Zeus Animation", "Hukummu", "Side Projects"] as const;
+const CATEGORIES = ["All", "Zeus Animation", "Hukumku", "Side Projects"] as const;
 type Category = (typeof CATEGORIES)[number];
 
 const GRADIENT_BTN =
