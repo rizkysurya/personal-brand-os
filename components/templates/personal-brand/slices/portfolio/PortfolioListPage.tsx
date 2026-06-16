@@ -84,7 +84,7 @@ export function PortfolioListPage() {
           items={sliceItems}
           hrefFor={(i) => `${PUBLIC_BASE}/portfolio/${i.slug}`}
           layout="uniform"
-          columns={2}
+          columns={3}
           className="!p-0"
         />
       )}
