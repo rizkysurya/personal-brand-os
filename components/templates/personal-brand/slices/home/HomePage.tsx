@@ -355,17 +355,21 @@ export function HomePage() {
 
   const [filter, setFilter] = React.useState<Category>("All");
   const [reelOpen, setReelOpen] = React.useState(false);
+  // Match by shared keyword so short admin categories still land under tab names.
+  const matchCat = (w: WorkCard, tab: string) => {
+    const words = (s: string) => s.toLowerCase().split(/[^a-z0-9]+/).filter((t) => t.length >= 2);
+    return (
+      words(w.category).some((t) => words(tab).includes(t)) ||
+      w.category.toLowerCase().includes(tab.toLowerCase())
+    );
+  };
   const filteredWork =
     filter === "All"
-      ? work
-      : work.filter((w) => {
-          // Match by shared keyword so short admin categories (e.g. "Motion", "IG")
-          // still land under the longer tab names (e.g. "Motion / Animation").
-          const words = (s: string) => s.toLowerCase().split(/[^a-z0-9]+/).filter((t) => t.length >= 2);
-          const cat = words(w.category);
-          const tab = words(filter);
-          return cat.some((t) => tab.includes(t)) || w.category.toLowerCase().includes(filter.toLowerCase());
-        });
+      ? // "All" = a teaser: one representative per category (in tab order). Full list lives on /portfolio.
+        (CATEGORIES.filter((c) => c !== "All")
+          .map((c) => work.find((w) => matchCat(w, c)))
+          .filter(Boolean) as WorkCard[])
+      : work.filter((w) => matchCat(w, filter));
 
   useScrollReveal([mounted, work.length, services.length, filter, cfg]);
 
@@ -551,6 +555,15 @@ export function HomePage() {
               </div>
             );
           })}
+        </div>
+        <div className="mt-10 flex justify-center">
+          <Link
+            href="/portfolio"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-2.5 text-sm font-medium text-white/80 transition-colors hover:border-white/30 hover:bg-white/10 hover:text-white"
+          >
+            Lihat semua karya
+            <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
+          </Link>
         </div>
       </section>
     ),
