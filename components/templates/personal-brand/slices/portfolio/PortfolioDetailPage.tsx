@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   PortfolioDetailView,
   type PortfolioItem as SliceItem,
@@ -90,19 +89,6 @@ export function PortfolioDetailPage({ slug }: { slug: string }) {
       backHref={`${PUBLIC_BASE}/portfolio`}
       related={relatedItems}
       hrefForRelated={(r) => `${PUBLIC_BASE}/portfolio/${r.slug}`}
-      afterContent={
-        <Card className="border-border/60 bg-gradient-to-br from-card/80 to-muted/20">
-          <CardContent className="flex flex-col gap-4 p-8 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h3 className="text-xl font-semibold tracking-tight">Mau hasil serupa?</h3>
-              <p className="text-sm text-muted-foreground">Mulai dari office hours 30 menit, gratis untuk first-timer.</p>
-            </div>
-            <Button asChild>
-              <Link href={`${PUBLIC_BASE}/services`}>Lihat layanan <ArrowUpRight className="size-4" /></Link>
-            </Button>
-          </CardContent>
-        </Card>
-      }
     />
   );
 }

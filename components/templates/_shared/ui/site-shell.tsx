@@ -46,6 +46,7 @@ export function SiteShell({
         copyrightHolder={copyrightHolder}
         tagline={footerTagline}
         belowBrand={belowFooterBrand}
+        socials={[]}
       />
     </div>
   );
