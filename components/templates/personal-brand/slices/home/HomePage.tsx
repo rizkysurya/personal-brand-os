@@ -304,7 +304,7 @@ export function HomePage() {
   const work: WorkCard[] = React.useMemo(() => {
     const rows = portfolioRaw as unknown as Array<Record<string, unknown>>;
     if (rows && rows.length > 0) {
-      return rows.slice(0, 6).map((p, i) => {
+      return rows.slice(0, 50).map((p, i) => {
         const videoUrl = typeof p.videoUrl === "string" && p.videoUrl ? p.videoUrl : undefined;
         const cover =
           (typeof p.cover === "string" && p.cover ? p.cover : "") || ytThumb(videoUrl);
