@@ -33,7 +33,7 @@ export function PublicChrome({ children }: { children: ReactNode }) {
       homeHref="/"
       navItems={PUBLIC_NAV}
       footerColumns={[]}
-      copyrightHolder={brand.brandName}
+      copyrightHolder="Rizky Surya Pratama | Motion & Graphic Designer"
     >
       {children}
     </SiteShell>
