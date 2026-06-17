@@ -17,7 +17,7 @@ const FALLBACK_COVER =
 function ytThumb(url?: string): string {
   if (!url) return "";
   const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
-  return yt ? `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg` : "";
+  return yt ? `https://img.youtube.com/vi/${yt[1]}/maxresdefault.jpg` : "";
 }
 
 /**

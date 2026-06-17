@@ -286,7 +286,7 @@ function toEmbed(url: string): string {
 function ytThumb(url?: string): string {
   if (!url) return "";
   const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
-  return yt ? `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg` : "";
+  return yt ? `https://img.youtube.com/vi/${yt[1]}/maxresdefault.jpg` : "";
 }
 
 export function HomePage() {
@@ -526,7 +526,15 @@ export function HomePage() {
                 <div className="relative aspect-[4/3] overflow-hidden">
                   {w.cover ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={w.cover} alt={w.title} className="h-full w-full object-cover" />
+                    <img
+                      src={w.cover}
+                      alt={w.title}
+                      className="h-full w-full object-cover"
+                      onError={(e) => {
+                        const t = e.currentTarget;
+                        if (t.src.includes("maxresdefault")) t.src = t.src.replace("maxresdefault", "hqdefault");
+                      }}
+                    />
                   ) : (
                     <div className={`work-cover grid h-full w-full place-items-center bg-linear-to-br ${w.tint}`}>
                       <span className="text-6xl font-black text-white/15">{w.title.charAt(0)}</span>
@@ -585,7 +593,7 @@ export function HomePage() {
   };
 
   return (
-    <div className="studio-root relative isolate" style={{ "--accent-1": accent, "--accent-2": accent2 } as React.CSSProperties}>
+    <div className="studio-root relative isolate overflow-x-clip" style={{ "--accent-1": accent, "--accent-2": accent2 } as React.CSSProperties}>
       {/* ambient background — original soft studio look */}
       <div aria-hidden className="absolute inset-0 -z-10 overflow-hidden">
         {/* soft ambient colour blobs */}
