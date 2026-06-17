@@ -385,7 +385,7 @@ export function HomePage() {
   const cvUrl = cfg?.cvUrl || "";
 
   const C = {
-    heroEyebrow: cfg?.heroEyebrow || "Motion Graphic Designer · Available for freelance & collaboration",
+    heroEyebrow: cfg?.heroEyebrow || "Motion Graphic Designer · 6+ years experience",
     heroHighlight: cfg?.heroHighlight || "Motion Graphic Designer",
     heroSubtext:
       cfg?.heroSubtext ||
